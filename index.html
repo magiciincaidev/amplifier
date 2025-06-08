@@ -1,0 +1,2166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Valvecaster改 実体配線図ガイド</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            background-color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .board-section {
+            margin: 30px 0;
+            padding: 20px;
+            background-color: #f8f9fa;
+            border-radius: 10px;
+        }
+        .legend {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            margin: 20px 0;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .wire-sample {
+            width: 30px;
+            height: 4px;
+            border-radius: 2px;
+        }
+        .step-box {
+            background-color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #3498db;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        .warning-box {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 20px 0;
+        }
+        .component-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        .component-table th, .component-table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+        .component-table th {
+            background-color: #3498db;
+            color: white;
+        }
+        .svg-container {
+            text-align: center;
+            margin: 20px 0;
+        }
+        svg {
+            max-width: 100%;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎛️ Valvecaster改 実体配線図ガイド</h1>
+        
+        <div class="warning-box">
+            <strong>⚠️ 重要：</strong>この図は基板を上から見た図です。実際の配線は基板の裏面で行います。
+        </div>
+
+        <h2>📊 配線カラーコード</h2>
+        <div class="legend">
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #ff0000;"></div>
+                <span>赤：+9V電源ライン</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #000000;"></div>
+                <span>黒：GND（グランド）</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #ffcc00;"></div>
+                <span>黄：音声出力信号</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #ffffff; border: 1px solid #ccc;"></div>
+                <span>白：音声入力信号</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #3366ff;"></div>
+                <span>青：SW1（カソードバイパス）</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #999999;"></div>
+                <span>灰：SW2（ゲイン切替）</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #00cc00;"></div>
+                <span>緑：ヒーター配線</span>
+            </div>
+            <div class="legend-item">
+                <div class="wire-sample" style="background-color: #ff9900;"></div>
+                <span>橙：内部接続</span>
+            </div>
+        </div>
+
+        <h2>🔧 実体配線図（上面図）</h2>
+        <div class="board-section">
+            <div class="svg-container">
+                <svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 基板背景 -->
+                    <rect x="50" y="50" width="700" height="400" fill="#2d4a2b" stroke="#666" stroke-width="3" rx="5"/>
+                    
+                    <!-- グリッド穴 -->
+                    <defs>
+                        <circle id="hole" r="4" fill="#c8b88b" stroke="#a09070" stroke-width="0.5"/>
+                    </defs>
+                    
+                    <!-- 穴の配置（30x20） -->
+                    <g id="holes">
+                        <script>
+                            // このスクリプトタグは実際には動作しません。穴は手動で配置します。
+                        </script>
+                        <!-- 簡略化のため、主要な穴のみ表示 -->
+                        <use href="#hole" x="100" y="100"/>
+                        <use href="#hole" x="120" y="100"/>
+                        <use href="#hole" x="140" y="100"/>
+                        <!-- 他の穴は省略 -->
+                    </g>
+
+                    <!-- 真空管ソケット -->
+                    <g id="tube-socket">
+                        <circle cx="400" cy="250" r="60" fill="rgba(100,100,100,0.5)" stroke="#333" stroke-width="2"/>
+                        <text x="400" y="255" text-anchor="middle" fill="white" font-weight="bold" font-size="14">12AX7</text>
+                        <!-- ピン配置 -->
+                        <circle cx="370" cy="220" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 1 -->
+                        <circle cx="370" cy="280" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 2 -->
+                        <circle cx="400" cy="295" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 3 -->
+                        <circle cx="430" cy="280" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 4 -->
+                        <circle cx="430" cy="220" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 5 -->
+                        <text x="360" y="215" font-size="10" fill="white">1</text>
+                        <text x="360" y="290" font-size="10" fill="white">2</text>
+                        <text x="400" y="310" font-size="10" fill="white">3</text>
+                        <text x="440" y="290" font-size="10" fill="white">4</text>
+                        <text x="440" y="215" font-size="10" fill="white">5</text>
+                    </g>
+
+                    <!-- 部品 -->
+                    <g id="components">
+                        <!-- C1 (入力コンデンサ) -->
+                        <rect x="240" y="240" width="30" height="20" fill="#4169e1" stroke="#000" rx="2"/>
+                        <text x="255" y="253" text-anchor="middle" fill="white" font-size="10">C1</text>
+                        
+                        <!-- C2 (出力コンデンサ) -->
+                        <rect x="530" y="240" width="30" height="20" fill="#4169e1" stroke="#000" rx="2"/>
+                        <text x="545" y="253" text-anchor="middle" fill="white" font-size="10">C2</text>
+                        
+                        <!-- Rk (カソード抵抗) -->
+                        <rect x="390" y="340" width="20" height="40" fill="#8b4513" stroke="#000" rx="2"/>
+                        <text x="400" y="363" text-anchor="middle" fill="white" font-size="10">Rk</text>
+                        
+                        <!-- Ck (カソードバイパス) -->
+                        <rect x="430" y="340" width="20" height="40" fill="#ff6347" stroke="#000" rx="2"/>
+                        <text x="440" y="363" text-anchor="middle" fill="white" font-size="10">Ck</text>
+                        
+                        <!-- Ra1 -->
+                        <rect x="500" y="120" width="40" height="20" fill="#8b4513" stroke="#000" rx="2"/>
+                        <text x="520" y="133" text-anchor="middle" fill="white" font-size="10">Ra1</text>
+                        
+                        <!-- Ra2 -->
+                        <rect x="500" y="160" width="40" height="20" fill="#8b4513" stroke="#000" rx="2"/>
+                        <text x="520" y="173" text-anchor="middle" fill="white" font-size="10">Ra2</text>
+                        
+                        <!-- Cin -->
+                        <rect x="650" y="320" width="30" height="50" fill="#ff6347" stroke="#000" rx="2"/>
+                        <text x="665" y="350" text-anchor="middle" fill="white" font-size="10">Cin</text>
+                    </g>
+
+                    <!-- 配線 -->
+                    <g id="wiring">
+                        <!-- GNDライン（黒） -->
+                        <line x1="100" y1="400" x2="700" y2="400" stroke="black" stroke-width="4"/>
+                        <text x="80" y="405" fill="white" font-size="12">GND</text>
+                        
+                        <!-- +9Vライン（赤） -->
+                        <line x1="100" y1="100" x2="700" y2="100" stroke="red" stroke-width="4"/>
+                        <text x="80" y="105" fill="white" font-size="12">+9V</text>
+                        
+                        <!-- 入力信号（白） -->
+                        <polyline points="150,250 240,250" stroke="white" stroke-width="3" fill="none"/>
+                        <polyline points="270,250 370,280" stroke="white" stroke-width="3" fill="none"/>
+                        <text x="120" y="250" fill="white" font-size="10">IN</text>
+                        
+                        <!-- カソード配線（橙） -->
+                        <polyline points="400,295 400,340" stroke="#ff9900" stroke-width="3" fill="none"/>
+                        <polyline points="400,295 440,340" stroke="#ff9900" stroke-width="3" fill="none"/>
+                        
+                        <!-- SW1配線（青） -->
+                        <polyline points="400,380 400,400" stroke="#3366ff" stroke-width="3" fill="none"/>
+                        <circle cx="400" cy="390" r="3" fill="#3366ff"/>
+                        <text x="380" y="395" fill="white" font-size="10">SW1</text>
+                        
+                        <!-- プレート配線（橙） -->
+                        <polyline points="370,220 530,240" stroke="#ff9900" stroke-width="3" fill="none"/>
+                        
+                        <!-- SW2配線（灰） -->
+                        <polyline points="370,220 370,150" stroke="#999999" stroke-width="3" fill="none"/>
+                        <circle cx="370" cy="150" r="3" fill="#999999"/>
+                        <text x="350" y="145" fill="white" font-size="10">SW2</text>
+                        <polyline points="370,150 500,130" stroke="#999999" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                        <polyline points="370,150 500,170" stroke="#999999" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                        
+                        <!-- 電源接続（赤） -->
+                        <polyline points="540,130 600,130 600,100" stroke="red" stroke-width="3" fill="none"/>
+                        <polyline points="540,170 600,170 600,100" stroke="red" stroke-width="3" fill="none"/>
+                        <polyline points="665,320 665,100" stroke="red" stroke-width="3" fill="none"/>
+                        
+                        <!-- ヒーター配線（緑） -->
+                        <polyline points="430,220 430,100" stroke="#00cc00" stroke-width="3" fill="none"/>
+                        <polyline points="430,280 430,400" stroke="#00cc00" stroke-width="3" fill="none"/>
+                        
+                        <!-- 出力信号（黄） -->
+                        <polyline points="560,250 650,250" stroke="#ffcc00" stroke-width="3" fill="none"/>
+                        <text x="680" y="250" fill="white" font-size="10">OUT</text>
+                        
+                        <!-- Cin GND接続（黒） -->
+                        <polyline points="665,370 665,400" stroke="black" stroke-width="3" fill="none"/>
+                    </g>
+
+                    <!-- 端子ラベル -->
+                    <g id="labels">
+                        <rect x="100" y="230" width="40" height="40" fill="rgba(255,255,255,0.8)" rx="5"/>
+                        <text x="120" y="254" text-anchor="middle" font-size="12">INPUT</text>
+                        
+                        <rect x="710" y="230" width="40" height="40" fill="rgba(255,255,255,0.8)" rx="5"/>
+                        <text x="730" y="254" text-anchor="middle" font-size="12">OUT</text>
+                        
+                        <rect x="600" y="70" width="40" height="30" fill="rgba(255,0,0,0.8)" rx="5"/>
+                        <text x="620" y="90" text-anchor="middle" font-size="12" fill="white">+9V</text>
+                        
+                        <rect x="600" y="410" width="40" height="30" fill="rgba(0,0,0,0.8)" rx="5"/>
+                        <text x="620" y="430" text-anchor="middle" font-size="12" fill="white">GND</text>
+                    </g>
+                </svg>
+            </div>
+        </div>
+
+        <h2>🎚️ 3D配置イメージ図</h2>
+        <div class="board-section">
+            <div class="svg-container">
+                <svg width="800" height="600" viewBox="0 0 800 600" xmlns="http://www.w3.org/2000/svg">
+                    <!-- 3D風の基板 -->
+                    <defs>
+                        <linearGradient id="boardGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+                            <stop offset="0%" style="stop-color:#3d5a3d;stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:#2d4a2b;stop-opacity:1" />
+                        </linearGradient>
+                        <filter id="shadow">
+                            <feGaussianBlur in="SourceAlpha" stdDeviation="3"/>
+                            <feOffset dx="2" dy="2" result="offsetblur"/>
+                            <feComponentTransfer>
+                                <feFuncA type="linear" slope="0.5"/>
+                            </feComponentTransfer>
+                            <feMerge> 
+                                <feMergeNode/>
+                                <feMergeNode in="SourceGraphic"/> 
+                            </feMerge>
+                        </filter>
+                    </defs>
+                    
+                    <!-- 基板本体（斜視図） -->
+                    <g transform="skewY(-5) scale(1, 0.9)">
+                        <rect x="100" y="150" width="600" height="350" fill="url(#boardGradient)" stroke="#444" stroke-width="2" filter="url(#shadow)"/>
+                        
+                        <!-- 真空管（立体的に） -->
+                        <g id="tube-3d">
+                            <ellipse cx="400" cy="300" rx="50" ry="45" fill="#444" opacity="0.8"/>
+                            <rect x="350" y="200" width="100" height="100" fill="#666" opacity="0.6" rx="10"/>
+                            <rect x="360" y="210" width="80" height="80" fill="#888" opacity="0.4" rx="10"/>
+                            <text x="400" y="250" text-anchor="middle" fill="white" font-weight="bold">12AX7</text>
+                        </g>
+                        
+                        <!-- 部品の立体表現 -->
+                        <!-- 抵抗 -->
+                        <g id="resistors-3d">
+                            <rect x="480" y="180" width="60" height="15" fill="#8b4513" rx="7" filter="url(#shadow)"/>
+                            <rect x="480" y="180" width="60" height="10" fill="#a0522d" rx="5"/>
+                            <text x="510" y="189" text-anchor="middle" fill="white" font-size="8">Ra1</text>
+                            
+                            <rect x="480" y="210" width="60" height="15" fill="#8b4513" rx="7" filter="url(#shadow)"/>
+                            <rect x="480" y="210" width="60" height="10" fill="#a0522d" rx="5"/>
+                            <text x="510" y="219" text-anchor="middle" fill="white" font-size="8">Ra2</text>
+                            
+                            <rect x="380" y="380" width="40" height="15" fill="#8b4513" rx="7" filter="url(#shadow)"/>
+                            <rect x="380" y="380" width="40" height="10" fill="#a0522d" rx="5"/>
+                            <text x="400" y="389" text-anchor="middle" fill="white" font-size="8">Rk</text>
+                        </g>
+                        
+                        <!-- コンデンサ -->
+                        <g id="capacitors-3d">
+                            <!-- C1 -->
+                            <ellipse cx="250" cy="290" rx="20" ry="15" fill="#4169e1" filter="url(#shadow)"/>
+                            <ellipse cx="250" cy="285" rx="20" ry="15" fill="#6495ed"/>
+                            <text x="250" y="289" text-anchor="middle" fill="white" font-size="8">C1</text>
+                            
+                            <!-- C2 -->
+                            <ellipse cx="550" cy="290" rx="20" ry="15" fill="#4169e1" filter="url(#shadow)"/>
+                            <ellipse cx="550" cy="285" rx="20" ry="15" fill="#6495ed"/>
+                            <text x="550" y="289" text-anchor="middle" fill="white" font-size="8">C2</text>
+                            
+                            <!-- Ck (電解) -->
+                            <rect x="430" y="370" width="25" height="35" fill="#ff6347" rx="12" filter="url(#shadow)"/>
+                            <rect x="430" y="365" width="25" height="35" fill="#ff7f50" rx="12"/>
+                            <text x="442" y="385" text-anchor="middle" fill="white" font-size="8">Ck</text>
+                            <line x1="442" y1="370" x2="442" y2="375" stroke="white" stroke-width="2"/>
+                            <text x="442" y="377" text-anchor="middle" fill="white" font-size="10">+</text>
+                            
+                            <!-- Cin (電解) -->
+                            <rect x="620" y="350" width="30" height="50" fill="#ff6347" rx="15" filter="url(#shadow)"/>
+                            <rect x="620" y="345" width="30" height="50" fill="#ff7f50" rx="15"/>
+                            <text x="635" y="375" text-anchor="middle" fill="white" font-size="8">Cin</text>
+                            <line x1="635" y1="350" x2="635" y2="358" stroke="white" stroke-width="2"/>
+                            <text x="635" y="360" text-anchor="middle" fill="white" font-size="10">+</text>
+                        </g>
+                        
+                        <!-- ジャック（立体的に） -->
+                        <g id="jacks-3d">
+                            <!-- 入力ジャック -->
+                            <rect x="130" y="280" width="30" height="25" fill="#333" rx="3" filter="url(#shadow)"/>
+                            <rect x="130" y="275" width="30" height="25" fill="#555" rx="3"/>
+                            <circle cx="145" cy="287" r="8" fill="#222"/>
+                            <circle cx="145" cy="287" r="5" fill="#000"/>
+                            <text x="145" y="315" text-anchor="middle" fill="white" font-size="10">IN</text>
+                            
+                            <!-- 出力ジャック -->
+                            <rect x="640" y="280" width="30" height="25" fill="#333" rx="3" filter="url(#shadow)"/>
+                            <rect x="640" y="275" width="30" height="25" fill="#555" rx="3"/>
+                            <circle cx="655" cy="287" r="8" fill="#222"/>
+                            <circle cx="655" cy="287" r="5" fill="#000"/>
+                            <text x="655" y="315" text-anchor="middle" fill="white" font-size="10">OUT</text>
+                        </g>
+                        
+                        <!-- 配線（簡略化） -->
+                        <g id="wiring-3d" opacity="0.7">
+                            <path d="M 145 287 L 250 285" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M 250 285 L 350 300" stroke="white" stroke-width="2" fill="none"/>
+                            <path d="M 450 300 L 550 285" stroke="#ff9900" stroke-width="2" fill="none"/>
+                            <path d="M 550 285 L 655 287" stroke="#ffcc00" stroke-width="2" fill="none"/>
+                            <path d="M 635 345 L 635 150" stroke="red" stroke-width="3" fill="none"/>
+                            <path d="M 400 395 L 400 450" stroke="black" stroke-width="3" fill="none"/>
+                        </g>
+                    </g>
+                    
+                    <!-- ラベル -->
+                    <text x="400" y="50" text-anchor="middle" font-size="20" font-weight="bold">3D配置イメージ（斜視図）</text>
+                    <text x="400" y="550" text-anchor="middle" font-size="14">※ 実際の配線は基板裏面で行います</text>
+                </svg>
+            </div>
+        </div>
+
+        <h2>📋 部品配置詳細</h2>
+        <table class="component-table">
+            <tr>
+                <th>部品</th>
+                <th>値</th>
+                <th>配置位置</th>
+                <th>注意事項</th>
+            </tr>
+            <tr>
+                <td>12AX7ソケット</td>
+                <td>9ピン</td>
+                <td>基板中央</td>
+                <td>ピン番号を確認して取付</td>
+            </tr>
+            <tr>
+                <td>C1</td>
+                <td>0.022μF</td>
+                <td>入力側（左）</td>
+                <td>フィルムコンデンサー推奨</td>
+            </tr>
+            <tr>
+                <td>Rg</td>
+                <td>1MΩ</td>
+                <td>C1出力側直下</td>
+                <td>グリッドリーク抵抗（必須）</td>
+            </tr>
+            <tr>
+                <td>C2</td>
+                <td>0.47μF</td>
+                <td>出力側（右）</td>
+                <td>オーディオグレード推奨</td>
+            </tr>
+            <tr>
+                <td>Rk</td>
+                <td>1.5kΩ</td>
+                <td>真空管下部</td>
+                <td>1/4W以上</td>
+            </tr>
+            <tr>
+                <td>Ra1</td>
+                <td>100kΩ</td>
+                <td>真空管上部</td>
+                <td>クリーン用</td>
+            </tr>
+            <tr>
+                <td>Ra2</td>
+                <td>470kΩ</td>
+                <td>真空管上部</td>
+                <td>オーバードライブ用</td>
+            </tr>
+            <tr>
+                <td>Ck</td>
+                <td>22μF/25V</td>
+                <td>Rk横</td>
+                <td>極性注意：+側をPin3へ</td>
+            </tr>
+            <tr>
+                <td>Cin</td>
+                <td>220μF/25V</td>
+                <td>電源部</td>
+                <td>極性注意：+側を+9Vへ</td>
+            </tr>
+            <tr>
+                <td>LED（赤）</td>
+                <td>3mm高輝度</td>
+                <td>ケース前面</td>
+                <td>電源表示用、ベゼル使用推奨</td>
+            </tr>
+            <tr>
+                <td>LED（青）</td>
+                <td>3mm高輝度</td>
+                <td>ケース前面</td>
+                <td>OD表示用、SW2連動</td>
+            </tr>
+            <tr>
+                <td>R_LED1, R_LED2</td>
+                <td>1kΩ各</td>
+                <td>LEDに直列</td>
+                <td>LED保護用、1/4W</td>
+            </tr>
+        </table>
+
+        <h2>🔨 実装手順（簡略版）</h2>
+        <div class="step-box">
+            <h3>Step 1: 電源ラインの配線</h3>
+            <p>基板の上端に赤線で+9Vライン、下端に黒線でGNDラインを配線します。これが全体の電源供給の基準になります。</p>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 2: 真空管ソケットの取付</h3>
+            <p>9ピンソケットを基板中央に配置し、各ピンをはんだ付けします。ピン1の位置を確認してください。</p>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 3: 受動部品の取付</h3>
+            <p>抵抗とコンデンサーを図の位置に配置します。電解コンデンサーは極性に注意してください。</p>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 4: 信号配線</h3>
+            <p>入力→グリッド→プレート→出力の順に信号経路を配線します。ノイズ対策のため、配線は短く保ちます。</p>
+        </div>
+
+        <div class="step-box">
+            <h3>Step 5: スイッチとジャックの接続</h3>
+            <p>SW1、SW2、入出力ジャック、ボリュームポットをリード線で接続します。シールド線の使用を推奨します。</p>
+        </div>
+
+        <h2>✅ 動作確認チェックリスト</h2>
+        <ul>
+            <li>□ <strong>DCジャック極性確認（センターがマイナス、外側がプラス）</strong></li>
+            <li>□ 電源ラインのショートチェック（+9VとGND間）</li>
+            <li>□ ヒーター電圧確認（Pin4とPin5の間で約9V DC）</li>
+            <li>□ 各スイッチの導通確認</li>
+            <li>□ 入出力ジャックの配線確認</li>
+            <li>□ LED極性の確認（長い足がアノード）</li>
+            <li>□ LED抵抗（1kΩ）が直列に入っているか確認</li>
+            <li>□ スターグランド配線の確認（すべて入力ジャックに集中）</li>
+            <li>□ 真空管挿入後、ヒーターの発光確認</li>
+            <li>□ 電源LED（赤）の点灯確認</li>
+            <li>□ SW2切替時の青LED動作確認</li>
+            <li>□ 音出しテスト（ボリューム最小から開始）</li>
+            <li>□ 4つの音色モードすべての動作確認</li>
+        </ul>
+
+        <div class="warning-box">
+            <strong>🔥 安全上の注意：</strong>
+            <ul>
+                <li>はんだ付け作業は換気の良い場所で行ってください</li>
+                <li>真空管は動作中熱くなります。触れないよう注意してください</li>
+                <li>電源投入前に必ず配線をダブルチェックしてください</li>
+                <li><strong>DCジャックの極性を必ずテスターで確認（BOSSはセンターマイナス）</strong></li>
+            </ul>
+        </div>
+
+        <h2>📏 ケース実装詳細ガイド</h2>
+        <div class="step-box">
+            <h3>推奨ケースと内部レイアウト</h3>
+            <h4>ケース：Hammond 1590BB または同等品</h4>
+            <ul>
+                <li>外寸：約120×95×35mm</li>
+                <li>内寸：約110×85×30mm（実効）</li>
+                <li><strong>高さ方向のクリアランス計算：</strong>
+                    <ul>
+                        <li>基板：1.6mm</li>
+                        <li>スペーサー：6mm（10mmは高すぎ）</li>
+                        <li>ソケット：20mm</li>
+                        <li>真空管突出：5mm</li>
+                        <li>合計：約33mm → ギリギリ収まる</li>
+                    </ul>
+                </li>
+            </ul>
+            
+            <h4>前面パネル穴あけ寸法</h4>
+            <table class="component-table">
+                <tr>
+                    <th>部品</th>
+                    <th>穴径</th>
+                    <th>位置（左端から）</th>
+                    <th>備考</th>
+                </tr>
+                <tr>
+                    <td>INPUT ジャック</td>
+                    <td>12mm</td>
+                    <td>20mm</td>
+                    <td>絶縁ワッシャー使用</td>
+                </tr>
+                <tr>
+                    <td>電源LED（赤）</td>
+                    <td>3mm</td>
+                    <td>35mm（上寄り）</td>
+                    <td>ベゼル使用推奨</td>
+                </tr>
+                <tr>
+                    <td>OD LED（青）</td>
+                    <td>3mm</td>
+                    <td>35mm（下寄り）</td>
+                    <td>ベゼル使用推奨</td>
+                </tr>
+                <tr>
+                    <td>SW1（GAIN）</td>
+                    <td>6mm</td>
+                    <td>45mm</td>
+                    <td>ナット2面幅確認</td>
+                </tr>
+                <tr>
+                    <td>SW2（TONE）</td>
+                    <td>6mm</td>
+                    <td>60mm</td>
+                    <td>ナット2面幅確認</td>
+                </tr>
+                <tr>
+                    <td>VOLUME</td>
+                    <td>7mm（軸）</td>
+                    <td>80mm</td>
+                    <td>+10mm逃げ穴</td>
+                </tr>
+                <tr>
+                    <td>OUTPUT ジャック</td>
+                    <td>12mm</td>
+                    <td>100mm</td>
+                    <td>絶縁ワッシャー使用</td>
+                </tr>
+            </table>
+            
+            <h4>背面パネル</h4>
+            <ul>
+                <li>DCジャック：2.1mm用の適切な穴径（通常11-12mm）</li>
+                <li>位置：中央やや右寄り</li>
+            </ul>
+            
+            <h4>天面（オプション）</h4>
+            <ul>
+                <li>真空管用通気孔：φ20-25mmの穴を真空管上部に</li>
+                <li>または装飾的なメッシュグリル</li>
+            </ul>
+        </div>
+
+        <h2>💡 LED抵抗値の計算ガイド</h2>
+        <div class="step-box">
+            <h3>LED保護抵抗の選定</h3>
+            <p>LED順電圧（Vf）と必要な電流から抵抗値を計算します。</p>
+            
+            <h4>計算式</h4>
+            <pre style="background-color: #f5f5f5; padding: 10px; border-radius: 5px;">
+R = (電源電圧 - LED順電圧) ÷ LED電流
+R = (9V - Vf) ÷ I_LED</pre>
+            
+            <h4>実例</h4>
+            <table class="component-table">
+                <tr>
+                    <th>LED色</th>
+                    <th>典型的Vf</th>
+                    <th>推奨電流</th>
+                    <th>計算値</th>
+                    <th>使用抵抗</th>
+                </tr>
+                <tr>
+                    <td>赤</td>
+                    <td>2.0V</td>
+                    <td>10mA</td>
+                    <td>700Ω</td>
+                    <td>1kΩ</td>
+                </tr>
+                <tr>
+                    <td>青</td>
+                    <td>3.3V</td>
+                    <td>10mA</td>
+                    <td>570Ω</td>
+                    <td>1kΩ</td>
+                </tr>
+                <tr>
+                    <td>超高輝度</td>
+                    <td>-</td>
+                    <td>5mA</td>
+                    <td>-</td>
+                    <td>2.2kΩ</td>
+                </tr>
+            </table>
+            <p><em>※ 1kΩで眩しすぎる場合は2.2kΩに変更</em></p>
+        </div>
+
+        <h2>🛠️ 詳細実装手順（全工程）</h2>
+        
+        <div class="detailed-steps">
+            <h3>【準備編】必要な工具と材料</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこれらの工具が必要なのか？</h4>
+                <p>電子工作は精密作業です。適切な工具を使うことで、作業効率が上がるだけでなく、部品を傷めず、安全に作業できます。特に初心者の方は、良い工具を使うことで失敗を減らせます。</p>
+                
+                <h4>工具</h4>
+                <ul>
+                    <li><strong>はんだごて（20-30W、温度調節可能なら350℃設定）</strong>
+                        <br><em>→ 真空管ソケットは熱に弱いため、適切な温度管理が重要</em></li>
+                    <li><strong>はんだ（0.8mm径、ヤニ入り）</strong>
+                        <br><em>→ 細めのはんだは温度管理しやすく、きれいな仕上がりに</em></li>
+                    <li><strong>ニッパー（リード線カット用）</strong>
+                        <br><em>→ 切れ味の良いものを使うと、部品にストレスをかけません</em></li>
+                    <li><strong>ワイヤーストリッパー（被覆剥き用）</strong>
+                        <br><em>→ カッターよりも確実に、芯線を傷つけずに剥けます</em></li>
+                    <li><strong>ピンセット（細かい作業用）</strong>
+                        <br><em>→ 小さな部品の位置決めや、熱い部品の取り扱いに必須</em></li>
+                    <li><strong>テスター（導通・電圧確認用）</strong>
+                        <br><em>→ 目に見えない電気の流れを確認する「目」の役割</em></li>
+                    <li><strong>フラックス（必要に応じて）</strong>
+                        <br><em>→ はんだの乗りが悪い時の救世主</em></li>
+                    <li><strong>はんだ吸い取り線（修正用）</strong>
+                        <br><em>→ 失敗しても修正できる安心感が大切</em></li>
+                </ul>
+                <h4>配線材</h4>
+                <ul>
+                    <li><strong>単線（0.5-0.6mm径）各色：</strong>
+                        <br><em>→ 基板上の配線に使用。単線は形が保持されて作業しやすい</em>
+                        <ul>
+                            <li>赤（電源+）、黒（GND）：電源系統を明確に</li>
+                            <li>白（入力）、黄（出力）：信号の流れを視覚化</li>
+                            <li>青、灰：スイッチ配線で機能を区別</li>
+                            <li>緑：ヒーター専用で他と区別</li>
+                            <li>橙：内部接続の識別用</li>
+                        </ul>
+                    </li>
+                    <li><strong>より線（フレキシブル配線用）：</strong>
+                        <br><em>→ 可動部分や外部接続に使用。柔軟性があり断線しにくい</em></li>
+                    <li><strong>シールド線（推奨）：</strong>
+                        <br><em>→ 入出力配線に使うとノイズを大幅に減らせます</em></li>
+                </ul>
+                <h4>推奨する追加購入品</h4>
+                <ul>
+                    <li><strong>熱収縮チューブ（各サイズ）</strong>
+                        <br><em>→ 接続部の保護とショート防止に必須。プロの仕上がりに</em></li>
+                    <li><strong>ICクリップ（テスター用）</strong>
+                        <br><em>→ 動作確認時に基板を触らずに測定できて便利</em></li>
+                    <li><strong>LEDベゼル（3mm用×2個）</strong>
+                        <br><em>→ ケースにLEDをきれいに取り付けるため</em></li>
+                    <li><strong>ケーブルタイ</strong>
+                        <br><em>→ 配線の整理整頓に</em></li>
+                </ul>
+            </div>
+
+            <h3>【工程1】基板の準備と電源バスラインの作成</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>電源バスライン</strong>は、電車の線路のような役割を果たします。すべての部品に安定した電源を供給するための「共通の道」を最初に作ることで、後の配線が簡単になり、電源ノイズも減少します。建築で言えば、水道管と下水管を最初に通すようなものです。</p>
+                
+                <!-- 工程1の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程1: 電源バスライン配線</text>
+                        
+                        <!-- グリッド表示（簡略化） -->
+                        <g opacity="0.3">
+                            <script>// グリッド線は省略</script>
+                        </g>
+                        
+                        <!-- 電源ライン（強調表示） -->
+                        <g stroke-width="6">
+                            <!-- +9Vライン（赤） -->
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="6"/>
+                            <circle cx="80" cy="80" r="4" fill="#ff0000"/>
+                            <circle cx="520" cy="80" r="4" fill="#ff0000"/>
+                            <text x="40" y="85" fill="white" font-size="14" font-weight="bold">+9V</text>
+                            
+                            <!-- GNDライン（黒） -->
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="6"/>
+                            <circle cx="80" cy="320" r="4" fill="#000000"/>
+                            <circle cx="520" cy="320" r="4" fill="#000000"/>
+                            <text x="35" y="325" fill="white" font-size="14" font-weight="bold">GND</text>
+                        </g>
+                        
+                        <!-- 作業指示 -->
+                        <g>
+                            <path d="M 80 100 L 80 140 L 200 140" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                            <text x="210" y="145" fill="black" font-size="12">赤線でつなぐ</text>
+                            
+                            <path d="M 80 300 L 80 260 L 200 260" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                            <text x="210" y="265" fill="black" font-size="12">黒線でつなぐ</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー定義 -->
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="yellow"/>
+                            </marker>
+                        </defs>
+                        
+                        <!-- はんだ付けポイント -->
+                        <g>
+                            <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 10穴ごとにはんだ付けして固定</text>
+                        </g>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>ユニバーサル基板（30×20穴）を用意し、表面の汚れを除去
+                        <br><em>→ 汚れがあるとはんだが乗りにくくなるため</em></li>
+                    <li>基板の向きを決定（部品面が上、はんだ面が下）
+                        <br><em>→ 統一することで配線ミスを防ぐ</em></li>
+                    <li><strong>GNDライン作成：</strong>黒線を基板下端（Y=18の位置）に沿って配線
+                        <ul>
+                            <li>始点：左端から3穴目（X=3, Y=18）</li>
+                            <li>終点：右端から3穴目（X=27, Y=18）</li>
+                            <li>単線を使用し、各10穴ごとにはんだ付けで固定</li>
+                        </ul>
+                        <em>→ GND（グランド）は電気の帰り道。すべての電流はここに戻ってきます</em>
+                    </li>
+                    <li><strong>+9Vライン作成：</strong>赤線を基板上端（Y=2の位置）に沿って配線
+                        <ul>
+                            <li>始点：左端から3穴目（X=3, Y=2）</li>
+                            <li>終点：右端から3穴目（X=27, Y=2）</li>
+                            <li>GNDラインと同様に固定</li>
+                        </ul>
+                        <em>→ +9Vは電源の供給源。上下に離すことで誤接続を防ぎます</em>
+                    </li>
+                </ol>
+                <h4>確認ポイント</h4>
+                <p>✓ テスターで+9VラインとGNDライン間がショートしていないことを確認（抵抗値＝∞）</p>
+                <p><em>→ ショートしていると電源を入れた瞬間に大電流が流れて危険です</em></p>
+            </div>
+
+            <h3>【工程2】真空管ソケットの取付</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>真空管ソケット</strong>は、この回路の心臓部です。真空管は高価で繊細な部品なので、直接はんだ付けせず、ソケットを使って着脱可能にします。また、真空管は消耗品なので、交換できることが重要です。中央に配置するのは、すべての配線を最短距離で結べるためです。</p>
+                
+                <!-- 工程2の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程2: 真空管ソケット取付</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                        </g>
+                        
+                        <!-- 真空管ソケット（強調表示） -->
+                        <g>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#ffd700" stroke-width="3"/>
+                            <text x="300" y="205" text-anchor="middle" fill="white" font-weight="bold">9ピン</text>
+                            <text x="300" y="220" text-anchor="middle" fill="white" font-weight="bold">ソケット</text>
+                            
+                            <!-- ピン配置 -->
+                            <g id="pins">
+                                <!-- Pin 1 -->
+                                <circle cx="270" cy="170" r="8" fill="#ffd700" stroke="#333" stroke-width="2"/>
+                                <text x="250" y="175" fill="white" font-size="12">1</text>
+                                
+                                <!-- Pin 2 -->
+                                <circle cx="270" cy="230" r="8" fill="#ffd700" stroke="#333" stroke-width="2"/>
+                                <text x="250" y="235" fill="white" font-size="12">2</text>
+                                
+                                <!-- Pin 3 -->
+                                <circle cx="300" cy="245" r="8" fill="#ffd700" stroke="#333" stroke-width="2"/>
+                                <text x="300" y="265" fill="white" font-size="12">3</text>
+                                
+                                <!-- Pin 4 -->
+                                <circle cx="330" cy="230" r="8" fill="#ffd700" stroke="#333" stroke-width="2"/>
+                                <text x="350" y="235" fill="white" font-size="12">4</text>
+                                
+                                <!-- Pin 5 -->
+                                <circle cx="330" cy="170" r="8" fill="#ffd700" stroke="#333" stroke-width="2"/>
+                                <text x="350" y="175" fill="white" font-size="12">5</text>
+                                
+                                <!-- 他のピン（6-9）は簡略化 -->
+                                <circle cx="310" cy="155" r="6" fill="#999" stroke="#333" stroke-width="1"/>
+                                <circle cx="290" cy="155" r="6" fill="#999" stroke="#333" stroke-width="1"/>
+                                <circle cx="255" cy="185" r="6" fill="#999" stroke="#333" stroke-width="1"/>
+                                <circle cx="255" cy="215" r="6" fill="#999" stroke="#333" stroke-width="1"/>
+                            </g>
+                            
+                            <!-- 向きの指示 -->
+                            <path d="M 240 200 A 60 60 0 0 1 255 160" stroke="yellow" stroke-width="3" fill="none" stroke-dasharray="5,5"/>
+                            <text x="200" y="140" fill="black" font-size="12">ピン1-9間が</text>
+                            <text x="200" y="155" fill="black" font-size="12">広い間隔</text>
+                        </g>
+                        
+                        <!-- 位置指示 -->
+                        <g>
+                            <line x1="300" y1="50" x2="300" y2="140" stroke="yellow" stroke-width="1" stroke-dasharray="3,3"/>
+                            <line x1="50" y1="200" x2="240" y2="200" stroke="yellow" stroke-width="1" stroke-dasharray="3,3"/>
+                            <text x="310" y="100" fill="black" font-size="12">基板中央</text>
+                        </g>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 裏面から各ピンをはんだ付け（3秒以内）</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>9ピンソケット（B9A）の向きを確認
+                        <ul>
+                            <li>ピン1とピン9の間が広い間隔になっている</li>
+                            <li>基板中央（X=15, Y=10）にソケット中心を配置</li>
+                        </ul>
+                        <em>→ ピン番号を間違えると回路が正しく動作しません</em>
+                    </li>
+                    <li>ソケットのピンを基板の穴に差し込む
+                        <ul>
+                            <li>無理に押し込まず、穴位置を確認しながら挿入</li>
+                            <li>ソケットが基板に密着するまで押し込む</li>
+                        </ul>
+                        <em>→ 浮いていると振動で接触不良を起こします</em>
+                    </li>
+                    <li>裏面からはんだ付け
+                        <ul>
+                            <li>まず対角の2ピン（Pin1とPin5など）を仮固定</li>
+                            <li>ソケットの水平を確認してから全ピンをはんだ付け</li>
+                            <li>はんだ付け時間は各ピン3秒以内（ソケットの熱損傷防止）</li>
+                        </ul>
+                        <em>→ プラスチック製ソケットは熱に弱く、長時間加熱すると変形します</em>
+                    </li>
+                </ol>
+                <h4>確認ポイント</h4>
+                <p>✓ 各ピンが確実にはんだ付けされているか目視確認</p>
+                <p>✓ 隣接ピン間のショートがないかテスターで確認</p>
+                <p><em>→ ピン間のショートは真空管を破損させる可能性があります</em></p>
+            </div>
+
+            <h3>【工程3】入力部の配線（C1とグリッド接続）</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>C1（カップリングコンデンサ）</strong>は、ギターからの音声信号（AC）は通すけれど、直流（DC）は通さない「ゲート」の役割をします。これにより、前段の機器のDC成分が真空管のグリッドに影響を与えることを防ぎます。0.022μFという小さい値は、低音をカットして、ギターアンプらしい明るい音色を作ります。<strong>Rg（グリッドリーク抵抗）</strong>は、グリッドに適切なDC基準電位を与える重要な部品です。</p>
+                
+                <!-- 工程3の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程3: 入力部配線</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#999" stroke-width="2"/>
+                            <!-- ピン（簡略表示） -->
+                            <circle cx="270" cy="170" r="6" fill="#999"/>
+                            <circle cx="270" cy="230" r="6" fill="#999"/>
+                            <circle cx="300" cy="245" r="6" fill="#999"/>
+                            <circle cx="330" cy="230" r="6" fill="#999"/>
+                            <circle cx="330" cy="170" r="6" fill="#999"/>
+                        </g>
+                        
+                        <!-- C1の配置（強調表示） -->
+                        <g>
+                            <rect x="160" y="190" width="40" height="20" fill="#4169e1" stroke="#ffd700" stroke-width="3" rx="5"/>
+                            <text x="180" y="204" text-anchor="middle" fill="white" font-size="12" font-weight="bold">C1</text>
+                            <text x="180" y="225" text-anchor="middle" fill="black" font-size="10">0.022μF</text>
+                            
+                            <!-- リード線 -->
+                            <line x1="160" y1="200" x2="140" y2="200" stroke="#333" stroke-width="2"/>
+                            <line x1="200" y1="200" x2="220" y2="200" stroke="#333" stroke-width="2"/>
+                        </g>
+                        
+                        <!-- Rg（グリッドリーク抵抗）の配置（強調表示） -->
+                        <g>
+                            <rect x="210" y="240" width="20" height="40" fill="#8b4513" stroke="#ffd700" stroke-width="3" rx="3"/>
+                            <text x="220" y="263" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Rg</text>
+                            <text x="220" y="295" text-anchor="middle" fill="black" font-size="10">1MΩ</text>
+                            <text x="250" y="260" fill="red" font-size="11" font-weight="bold">重要！</text>
+                        </g>
+                        
+                        <!-- 配線（強調表示） -->
+                        <g>
+                            <!-- 入力ジャックからC1へ（白線） -->
+                            <path d="M 80 200 L 140 200" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            <text x="60" y="195" fill="white" font-size="12">IN</text>
+                            <circle cx="80" cy="200" r="6" fill="white" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- C1からPin2へ（白線） -->
+                            <path d="M 200 200 L 220 200 L 220 230 L 270 230" stroke="white" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="270" cy="230" r="8" fill="#ffd700" stroke="#ff0000" stroke-width="3"/>
+                            <text x="245" y="225" fill="white" font-size="12">Pin2</text>
+                            <text x="230" y="245" fill="black" font-size="10">(Grid)</text>
+                            
+                            <!-- RgからGNDへ（黒線） -->
+                            <path d="M 220 240 L 220 200" stroke="#8b4513" stroke-width="3"/>
+                            <path d="M 220 280 L 220 320" stroke="black" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="220" cy="200" r="4" fill="#8b4513"/>
+                        </g>
+                        
+                        <!-- 作業指示 -->
+                        <g>
+                            <path d="M 110 160 L 110 190" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead3)"/>
+                            <text x="50" y="155" fill="black" font-size="11">白線20cm</text>
+                            <text x="50" y="170" fill="black" font-size="11">より線使用</text>
+                            
+                            <path d="M 210 230 L 240 230" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead3)"/>
+                            <text x="150" y="250" fill="black" font-size="11">白線で接続</text>
+                            
+                            <path d="M 260 260 L 240 260" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead3)"/>
+                            <text x="265" y="265" fill="black" font-size="11">Rgを忘れずに！</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー -->
+                        <defs>
+                            <marker id="arrowhead3" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="yellow"/>
+                            </marker>
+                        </defs>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ グリッドリーク抵抗（Rg）は必須です！</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>C1（0.022μF）の取付
+                        <ul>
+                            <li>位置：真空管ソケットの左側（X=8, Y=9）から（X=8, Y=11）</li>
+                            <li>リード線を適切な長さにカットして成形</li>
+                            <li>部品面から挿入し、裏面ではんだ付け</li>
+                        </ul>
+                        <em>→ フィルムコンデンサは極性がないので、どちら向きでもOK</em>
+                    </li>
+                    <li><strong>Rg（1MΩ グリッドリーク抵抗）の取付【重要】</strong>
+                        <ul>
+                            <li>位置：（X=8, Y=12）から（X=8, Y=14）垂直配置</li>
+                            <li>カラーコード確認：茶・黒・緑・金</li>
+                            <li>上端をC1出力側と同じポイントに接続</li>
+                            <li>下端をGNDラインへ</li>
+                        </ul>
+                        <em>→ この抵抗がないとグリッドが「浮いて」動作不安定になります！</em>
+                    </li>
+                    <li>入力ジャック配線の準備
+                        <ul>
+                            <li>白色のより線を20cm程度用意</li>
+                            <li>両端の被覆を5mm剥く</li>
+                            <li>片端を基板の入力パッド（C1の左側）に予備はんだ</li>
+                        </ul>
+                        <em>→ より線を使うのは、ジャックへの配線が曲げやすく断線しにくいため</em>
+                    </li>
+                    <li>C1出力側からPin2（グリッド）への配線
+                        <ul>
+                            <li>白色の単線で（X=8, Y=11）から（X=13, Y=11）へ配線</li>
+                            <li>Pin2の位置を確認して確実に接続</li>
+                            <li><strong>同じ（X=8, Y=11）の点にRgの上端も接続</strong></li>
+                        </ul>
+                        <em>→ グリッドは真空管の「入力端子」。ここに来た信号が増幅されます</em>
+                    </li>
+                </ol>
+                <h4>注意事項</h4>
+                <p>⚠️ グリッド配線は高インピーダンスのため、配線は最短距離で行う</p>
+                <p>⚠️ <strong>Rgを忘れると動作しません！必ず取り付けてください</strong></p>
+                <p><em>→ 長い配線はアンテナになってノイズを拾いやすくなります</em></p>
+            </div>
+
+            <h3>【工程4】カソード回路の構築</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>カソード回路</strong>は真空管の動作点を決める重要な部分です。<strong>Rk</strong>に電流が流れると電圧が発生し、これによりグリッドが相対的にマイナスになります（自己バイアス）。<strong>Ck</strong>は音声信号に対してはRkをショートさせ、ゲインを上げる役割があります。SW1でこのCkを切り離すことで、ゲインを調整できます。</p>
+                
+                <!-- 工程4の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程4: カソード回路</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#999" stroke-width="2"/>
+                            <!-- ピン -->
+                            <circle cx="270" cy="170" r="6" fill="#999"/>
+                            <circle cx="270" cy="230" r="6" fill="#999"/>
+                            <circle cx="300" cy="245" r="6" fill="#999"/>
+                            <circle cx="330" cy="230" r="6" fill="#999"/>
+                            <circle cx="330" cy="170" r="6" fill="#999"/>
+                            <!-- C1と配線 -->
+                            <rect x="160" y="190" width="40" height="20" fill="#4169e1" stroke="#999" stroke-width="1" rx="5"/>
+                            <path d="M 80 200 L 160 200" stroke="white" stroke-width="3" opacity="0.6"/>
+                            <path d="M 200 200 L 270 230" stroke="white" stroke-width="3" opacity="0.6"/>
+                        </g>
+                        
+                        <!-- Rk（強調表示） -->
+                        <g>
+                            <rect x="290" y="280" width="20" height="40" fill="#8b4513" stroke="#ffd700" stroke-width="3" rx="3"/>
+                            <text x="300" y="303" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Rk</text>
+                            <text x="300" y="335" text-anchor="middle" fill="black" font-size="10">1.5kΩ</text>
+                            <!-- カラーコード -->
+                            <rect x="292" y="285" width="16" height="3" fill="#8b4513"/>
+                            <rect x="292" y="288" width="16" height="3" fill="#00ff00"/>
+                            <rect x="292" y="291" width="16" height="3" fill="#ff0000"/>
+                            <rect x="292" y="294" width="16" height="3" fill="#ffd700"/>
+                        </g>
+                        
+                        <!-- Ck（強調表示） -->
+                        <g>
+                            <rect x="340" y="280" width="25" height="40" fill="#ff6347" stroke="#ffd700" stroke-width="3" rx="12"/>
+                            <text x="352" y="303" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Ck</text>
+                            <text x="352" y="335" text-anchor="middle" fill="black" font-size="10">22μF</text>
+                            <!-- 極性マーク -->
+                            <line x1="340" y1="290" x2="365" y2="290" stroke="white" stroke-width="2"/>
+                            <line x1="352" y1="285" x2="352" y2="295" stroke="white" stroke-width="2"/>
+                            <text x="352" y="288" text-anchor="middle" fill="white" font-size="14" font-weight="bold">+</text>
+                            <text x="370" y="303" fill="red" font-size="12">←+側</text>
+                        </g>
+                        
+                        <!-- Pin3（強調表示） -->
+                        <circle cx="300" cy="245" r="8" fill="#ffd700" stroke="#ff0000" stroke-width="3"/>
+                        <text x="275" y="240" fill="white" font-size="12">Pin3</text>
+                        <text x="250" y="255" fill="black" font-size="10">(Cathode)</text>
+                        
+                        <!-- 配線（強調表示） -->
+                        <g>
+                            <!-- Pin3からRk/Ckへ（橙線） -->
+                            <path d="M 300 245 L 300 280" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 300 280 L 352 280" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+                            
+                            <!-- SW1への配線準備（青線） -->
+                            <path d="M 300 320 L 300 340" stroke="#3366ff" stroke-width="4" stroke-linecap="round" stroke-dasharray="5,5"/>
+                            <circle cx="300" cy="340" r="4" fill="#3366ff"/>
+                            <text x="250" y="345" fill="black" font-size="11">SW1へ</text>
+                            <text x="240" y="360" fill="black" font-size="11">（青線15cm）</text>
+                        </g>
+                        
+                        <!-- 作業指示 -->
+                        <g>
+                            <path d="M 380 290 L 410 260" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead4)"/>
+                            <text x="420" y="260" fill="red" font-size="12" font-weight="bold">極性注意！</text>
+                            <text x="420" y="275" fill="black" font-size="11">+側を上に</text>
+                            
+                            <path d="M 280 300 L 250 300" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead4)"/>
+                            <text x="150" y="305" fill="black" font-size="11">Rkと並列に</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー -->
+                        <defs>
+                            <marker id="arrowhead4" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="yellow"/>
+                            </marker>
+                        </defs>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 電解コンデンサの極性を必ず確認</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>Rk（1.5kΩ）の取付
+                        <ul>
+                            <li>位置：（X=15, Y=14）から（X=15, Y=16）垂直配置</li>
+                            <li>カラーコード確認：茶・緑・赤・金</li>
+                            <li>上端をPin3側、下端をGND側に配置</li>
+                        </ul>
+                        <em>→ 1.5kΩは真空管に適切なバイアスを与える標準的な値です</em>
+                    </li>
+                    <li>Ck（22μF電解コンデンサ）の取付
+                        <ul>
+                            <li>位置：（X=17, Y=14）から（X=17, Y=16）Rkと並列</li>
+                            <li><strong>極性注意：</strong>長い足（+）を上側（Pin3側）へ</li>
+                            <li>本体の白い帯（-マーク）が下側（GND側）になることを確認</li>
+                        </ul>
+                        <em>→ 電解コンデンサは逆接続すると破裂する危険があります！</em>
+                    </li>
+                    <li>Pin3からカソード部品への配線
+                        <ul>
+                            <li>橙色の単線でPin3（X=15, Y=11）から（X=15, Y=14）へ</li>
+                            <li>さらに（X=15, Y=14）から（X=17, Y=14）へ横配線でCkの+側にも接続</li>
+                        </ul>
+                        <em>→ カソードから流れ出る電流がRkとCkの両方を通るようにします</em>
+                    </li>
+                    <li>SW1用配線の準備
+                        <ul>
+                            <li>青色のより線を15cm用意</li>
+                            <li>（X=15, Y=16）のRk下端から引き出し</li>
+                        </ul>
+                        <em>→ SW1でRkの下端をGNDに直結するか選択できるようにします</em>
+                    </li>
+                </ol>
+                <h4>確認ポイント</h4>
+                <p>✓ Ckの極性が正しいか再確認（逆接続は破損の原因）</p>
+                <p>✓ RkとCkが並列に接続されているか確認</p>
+                <p><em>→ 並列接続により、DC的にはRkが働き、AC的にはCkがショートとして働きます</em></p>
+            </div>
+
+            <h3>【工程5】プレート回路とSW2配線</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>プレート抵抗（Ra）</strong>は、真空管の出力特性を決める重要な部品です。抵抗値が大きいほど出力電圧は大きくなりますが、同時に歪みやすくなります。100kΩではクリーンな音、470kΩでは歪みやすい音になります。これは、大きな抵抗では電圧降下が大きくなり、信号の振幅が電源電圧に近づくと波形がクリップ（頭打ち）するためです。</p>
+                
+                <!-- 工程5の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程5: プレート回路とSW2配線</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#999" stroke-width="2"/>
+                            <!-- ピン -->
+                            <circle cx="270" cy="170" r="6" fill="#999"/>
+                            <circle cx="270" cy="230" r="6" fill="#999"/>
+                            <circle cx="300" cy="245" r="6" fill="#999"/>
+                            <circle cx="330" cy="230" r="6" fill="#999"/>
+                            <circle cx="330" cy="170" r="6" fill="#999"/>
+                            <!-- 既存部品 -->
+                            <rect x="160" y="190" width="40" height="20" fill="#4169e1" stroke="#999" stroke-width="1" rx="5"/>
+                            <rect x="290" y="280" width="20" height="40" fill="#8b4513" stroke="#999" stroke-width="1" rx="3"/>
+                            <rect x="340" y="280" width="25" height="40" fill="#ff6347" stroke="#999" stroke-width="1" rx="12"/>
+                            <!-- 既存配線 -->
+                            <path d="M 80 200 L 270 230" stroke="white" stroke-width="3" opacity="0.6"/>
+                            <path d="M 300 245 L 300 280 L 352 280" stroke="#ff9900" stroke-width="3" opacity="0.6"/>
+                        </g>
+                        
+                        <!-- Pin1（強調表示） -->
+                        <circle cx="270" cy="170" r="8" fill="#ffd700" stroke="#ff0000" stroke-width="3"/>
+                        <text x="245" y="165" fill="white" font-size="12">Pin1</text>
+                        <text x="235" y="155" fill="black" font-size="10">(Plate)</text>
+                        
+                        <!-- Ra1（強調表示） -->
+                        <g>
+                            <rect x="400" y="110" width="60" height="20" fill="#8b4513" stroke="#ffd700" stroke-width="3" rx="3"/>
+                            <text x="430" y="124" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Ra1</text>
+                            <text x="430" y="145" text-anchor="middle" fill="black" font-size="10">100kΩ</text>
+                            <text x="480" y="125" fill="black" font-size="10">クリーン</text>
+                        </g>
+                        
+                        <!-- Ra2（強調表示） -->
+                        <g>
+                            <rect x="400" y="150" width="60" height="20" fill="#8b4513" stroke="#ffd700" stroke-width="3" rx="3"/>
+                            <text x="430" y="164" text-anchor="middle" fill="white" font-size="10" font-weight="bold">Ra2</text>
+                            <text x="430" y="185" text-anchor="middle" fill="black" font-size="10">470kΩ</text>
+                            <text x="480" y="165" fill="black" font-size="10">OD</text>
+                        </g>
+                        
+                        <!-- 配線（強調表示） -->
+                        <g>
+                            <!-- Ra1,Ra2から+9Vへ（赤線） -->
+                            <path d="M 460 120 L 490 120 L 490 80" stroke="#ff0000" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 460 160 L 490 160 L 490 80" stroke="#ff0000" stroke-width="4" stroke-linecap="round"/>
+                            
+                            <!-- Pin1からSW2へ（灰線） -->
+                            <path d="M 270 170 L 270 140" stroke="#999999" stroke-width="4" stroke-linecap="round"/>
+                            <circle cx="270" cy="140" r="6" fill="#999999"/>
+                            <text x="240" y="135" fill="black" font-size="11">SW2へ</text>
+                            <text x="220" y="120" fill="black" font-size="10">（灰線20cm）</text>
+                            
+                            <!-- SW2からRa1,Ra2へ（灰線、点線） -->
+                            <path d="M 270 140 L 350 140 L 350 120 L 400 120" stroke="#999999" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5"/>
+                            <path d="M 270 140 L 350 140 L 350 160 L 400 160" stroke="#999999" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5"/>
+                        </g>
+                        
+                        <!-- SW2の図解 -->
+                        <g transform="translate(320, 90)">
+                            <rect x="-20" y="-10" width="40" height="40" fill="white" stroke="#333" stroke-width="2" rx="3"/>
+                            <circle cx="0" cy="0" r="3" fill="#333"/>
+                            <line x1="0" y1="0" x2="15" y2="-8" stroke="#333" stroke-width="2"/>
+                            <text x="0" y="30" text-anchor="middle" font-size="10">SW2</text>
+                            <text x="0" y="42" text-anchor="middle" font-size="8">SPDT</text>
+                        </g>
+                        
+                        <!-- 作業指示 -->
+                        <g>
+                            <path d="M 350 100 L 380 100" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead5)"/>
+                            <text x="250" y="85" fill="black" font-size="11">3端子スイッチ</text>
+                            <text x="250" y="98" fill="black" font-size="11">中央が共通</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー -->
+                        <defs>
+                            <marker id="arrowhead5" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="yellow"/>
+                            </marker>
+                        </defs>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ SW2で100kΩ（クリーン）と470kΩ（OD）を切り替え</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>Ra1（100kΩ）の取付
+                        <ul>
+                            <li>位置：（X=20, Y=5）から（X=23, Y=5）水平配置</li>
+                            <li>カラーコード：茶・黒・黄・金</li>
+                        </ul>
+                        <em>→ クリーンサウンド用の標準的な値</em>
+                    </li>
+                    <li>Ra2（470kΩ）の取付
+                        <ul>
+                            <li>位置：（X=20, Y=3）から（X=23, Y=3）水平配置</li>
+                            <li>カラーコード：黄・紫・黄・金</li>
+                        </ul>
+                        <em>→ オーバードライブサウンド用の高い値</em>
+                    </li>
+                    <li>プレート抵抗の電源接続
+                        <ul>
+                            <li>赤色単線で（X=23, Y=5）から（X=23, Y=2）の+9Vラインへ</li>
+                            <li>同様に（X=23, Y=3）から（X=23, Y=2）へ接続</li>
+                        </ul>
+                        <em>→ どちらの抵抗も+9V電源に接続し、SW2で選択します</em>
+                    </li>
+                    <li>SW2配線の作成
+                        <ul>
+                            <li>Pin1（X=13, Y=9）から灰色より線でSW2中央端子へ（20cm）</li>
+                            <li>SW2左端子から（X=20, Y=5）Ra1左端へ（15cm）</li>
+                            <li>SW2右端子から（X=20, Y=3）Ra2左端へ（15cm）</li>
+                        </ul>
+                        <em>→ SW2は「どちらの抵抗を使うか」を選ぶスイッチです</em>
+                    </li>
+                </ol>
+                <h4>注意事項</h4>
+                <p>⚠️ SW2は3端子のSPDTスイッチを使用。中央が共通端子</p>
+                <p><em>→ 2つの抵抗を同時に接続すると、並列合成抵抗になって音が変わります</em></p>
+            </div>
+
+            <h3>【工程6】出力部の配線</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>C2（出力カップリングコンデンサ）</strong>は、増幅された信号から直流成分を取り除きます。真空管のプレートには高い直流電圧がかかっているので、これをカットしないと次の機器を壊してしまいます。0.47μFという大きめの値は、低音もしっかり通すためです。<strong>ボリュームポット</strong>は可変抵抗器で、出力信号をどれだけGNDに逃がすかで音量を調整します。</p>
+                
+                <!-- 工程6の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程6: 出力部配線</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#999" stroke-width="2"/>
+                            <!-- ピン -->
+                            <circle cx="270" cy="170" r="6" fill="#999"/>
+                            <circle cx="270" cy="230" r="6" fill="#999"/>
+                            <circle cx="300" cy="245" r="6" fill="#999"/>
+                            <!-- 既存部品 -->
+                            <rect x="160" y="190" width="40" height="20" fill="#4169e1" stroke="#999" stroke-width="1" rx="5"/>
+                            <rect x="290" y="280" width="20" height="40" fill="#8b4513" stroke="#999" stroke-width="1" rx="3"/>
+                            <rect x="340" y="280" width="25" height="40" fill="#ff6347" stroke="#999" stroke-width="1" rx="12"/>
+                            <rect x="400" y="110" width="60" height="20" fill="#8b4513" stroke="#999" stroke-width="1" rx="3"/>
+                            <rect x="400" y="150" width="60" height="20" fill="#8b4513" stroke="#999" stroke-width="1" rx="3"/>
+                            <!-- プレート配線 -->
+                            <path d="M 270 170 L 270 140" stroke="#999999" stroke-width="3" opacity="0.6"/>
+                        </g>
+                        
+                        <!-- C2（強調表示） -->
+                        <g>
+                            <rect x="420" y="190" width="40" height="20" fill="#4169e1" stroke="#ffd700" stroke-width="3" rx="5"/>
+                            <text x="440" y="204" text-anchor="middle" fill="white" font-size="12" font-weight="bold">C2</text>
+                            <text x="440" y="225" text-anchor="middle" fill="black" font-size="10">0.47μF</text>
+                        </g>
+                        
+                        <!-- Pin1からC2への配線（橙線） -->
+                        <path d="M 270 170 L 340 170 L 340 200 L 420 200" stroke="#ff9900" stroke-width="4" stroke-linecap="round"/>
+                        
+                        <!-- C2からVolumeへの配線（黄線） -->
+                        <path d="M 460 200 L 520 200" stroke="#ffcc00" stroke-width="4" stroke-linecap="round"/>
+                        <circle cx="520" cy="200" r="6" fill="#ffcc00" stroke="#333" stroke-width="2"/>
+                        <text x="535" y="195" fill="white" font-size="12">OUT</text>
+                        
+                        <!-- Volumeポットの図解 -->
+                        <g transform="translate(490, 250)">
+                            <circle cx="0" cy="0" r="25" fill="white" stroke="#333" stroke-width="2"/>
+                            <circle cx="0" cy="0" r="15" fill="#ddd" stroke="#333" stroke-width="1"/>
+                            <line x1="0" y1="0" x2="0" y2="-10" stroke="#333" stroke-width="3"/>
+                            <text x="0" y="40" text-anchor="middle" font-size="10">Volume</text>
+                            <text x="0" y="52" text-anchor="middle" font-size="8">B100kΩ</text>
+                            <!-- 端子 -->
+                            <circle cx="-20" cy="0" r="3" fill="#333"/>
+                            <text x="-30" y="5" font-size="8">1</text>
+                            <circle cx="0" cy="20" r="3" fill="#333"/>
+                            <text x="5" y="25" font-size="8">2</text>
+                            <circle cx="20" cy="0" r="3" fill="#333"/>
+                            <text x="30" y="5" font-size="8">3</text>
+                        </g>
+                        
+                        <!-- 配線指示 -->
+                        <g>
+                            <path d="M 490 225 L 490 200" stroke="yellow" stroke-width="2" fill="none" marker-end="url(#arrowhead6)"/>
+                            <text x="420" y="240" fill="black" font-size="11">黄線25cm</text>
+                            <text x="420" y="255" fill="black" font-size="11">中央端子へ</text>
+                            
+                            <path d="M 510 250 L 510 320" stroke="black" stroke-width="3" stroke-dasharray="5,5"/>
+                            <text x="515" y="310" fill="black" font-size="11">端子3→GND</text>
+                            
+                            <path d="M 470 250 L 440 250" stroke="#ffcc00" stroke-width="3" stroke-dasharray="5,5"/>
+                            <text x="380" y="255" fill="black" font-size="11">端子2→OUT</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー -->
+                        <defs>
+                            <marker id="arrowhead6" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="yellow"/>
+                            </marker>
+                        </defs>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ C2で直流をカット、Volumeで音量調整</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>C2（0.47μF）の取付
+                        <ul>
+                            <li>位置：（X=22, Y=9）から（X=22, Y=11）</li>
+                            <li>フィルムコンデンサまたはオーディオグレード推奨</li>
+                        </ul>
+                        <em>→ C1より大きい値で、ベースやミッドレンジをしっかり伝えます</em>
+                    </li>
+                    <li>Pin1からC2への配線
+                        <ul>
+                            <li>橙色単線で（X=13, Y=9）Pin1から（X=22, Y=9）C2入力へ</li>
+                            <li>プレート信号を出力コンデンサへ伝送</li>
+                        </ul>
+                        <em>→ Pin1（プレート）は増幅された信号の出力端子です</em>
+                    </li>
+                    <li>ボリュームポットへの配線
+                        <ul>
+                            <li>黄色より線を25cm用意</li>
+                            <li>（X=22, Y=11）C2出力からVolumeポット中央端子へ</li>
+                            <li>黒色線でVolumeポットの端子3（GND側）をGNDラインへ</li>
+                        </ul>
+                        <em>→ ポットは信号を端子1-3間の抵抗で分圧し、端子2から取り出します</em>
+                    </li>
+                    <li>出力ジャックへの配線
+                        <ul>
+                            <li>黄色より線でVolumeポット端子2から出力ジャックTipへ</li>
+                        </ul>
+                        <em>→ ボリュームで調整された信号が最終出力となります</em>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>【工程7】ヒーター配線</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>ヒーター</strong>は真空管内部のフィラメントで、カソードを加熱して電子を放出しやすくします。通常12AX7は12.6V/0.3Aで動作しますが、9Vでも薄暗く光り、動作します。これは「スターブド・プレート（飢餓電圧）」動作と呼ばれ、独特の歪みキャラクターを生み出します。ヒーター配線は交流ノイズの原因になりやすいので、他の信号線から離して配線します。</p>
+                
+                <!-- 工程7の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程7: ヒーター配線</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#999" stroke-width="2"/>
+                            <!-- すべての既存配線と部品 -->
+                        </g>
+                        
+                        <!-- ヒーターピン（強調表示） -->
+                        <circle cx="330" cy="230" r="8" fill="#ffd700" stroke="#00ff00" stroke-width="3"/>
+                        <text x="350" y="235" fill="white" font-size="12">Pin4</text>
+                        
+                        <circle cx="330" cy="170" r="8" fill="#ffd700" stroke="#00ff00" stroke-width="3"/>
+                        <text x="350" y="175" fill="white" font-size="12">Pin5</text>
+                        
+                        <!-- ヒーター配線（緑線） -->
+                        <g>
+                            <!-- Pin4から+9Vへ -->
+                            <path d="M 330 230 L 330 80" stroke="#00cc00" stroke-width="4" stroke-linecap="round"/>
+                            <text x="340" y="150" fill="black" font-size="11">垂直配線</text>
+                            
+                            <!-- Pin5からGNDへ -->
+                            <path d="M 330 170 L 330 320" stroke="#00cc00" stroke-width="4" stroke-linecap="round"/>
+                            <text x="340" y="250" fill="black" font-size="11">垂直配線</text>
+                        </g>
+                        
+                        <!-- ヒーターの図解 -->
+                        <g transform="translate(150, 200)">
+                            <rect x="-40" y="-30" width="80" height="60" fill="white" stroke="#333" stroke-width="2" rx="5"/>
+                            <text x="0" y="-10" text-anchor="middle" font-size="10">ヒーター</text>
+                            <path d="M -20 0 Q -10 10, 0 0 Q 10 -10, 20 0" stroke="#ff6600" stroke-width="3" fill="none"/>
+                            <text x="0" y="20" text-anchor="middle" font-size="8">12.6V仕様</text>
+                            <text x="0" y="30" text-anchor="middle" font-size="8">→9Vで動作</text>
+                        </g>
+                        
+                        <!-- 注意事項 -->
+                        <g>
+                            <rect x="70" y="280" width="150" height="50" fill="#fff3cd" stroke="#ffeeba" stroke-width="2" rx="5"/>
+                            <text x="145" y="295" text-anchor="middle" font-size="10" font-weight="bold">ポイント</text>
+                            <text x="145" y="310" text-anchor="middle" font-size="9">信号線と交差を避ける</text>
+                            <text x="145" y="323" text-anchor="middle" font-size="9">垂直配線でノイズ減</text>
+                        </g>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 9Vでは薄暗く光る程度ですが正常です</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>Pin4（ヒーター1）の配線
+                        <ul>
+                            <li>緑色単線で（X=17, Y=9）Pin4から（X=17, Y=2）+9Vラインへ</li>
+                            <li>垂直に配線して他の信号線との交差を最小化</li>
+                        </ul>
+                        <em>→ 垂直配線により、横に走る信号線との電磁的干渉を減らします</em>
+                    </li>
+                    <li>Pin5（ヒーター2）の配線
+                        <ul>
+                            <li>緑色単線で（X=17, Y=11）Pin5から（X=17, Y=18）GNDラインへ</li>
+                            <li>こちらも垂直配線を心がける</li>
+                        </ul>
+                        <em>→ Pin4とPin5の間にヒーターがあり、電流が流れて発熱します</em>
+                    </li>
+                </ol>
+                <h4>確認ポイント</h4>
+                <p>✓ Pin4-Pin5間の抵抗値を測定（12AX7の場合、冷時で約10-20Ω）</p>
+                <p><em>→ この抵抗値はヒーターが正常であることを示します</em></p>
+            </div>
+
+            <h3>【工程8】電源部の構築</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p><strong>Cin（電源フィルタコンデンサ）</strong>は、電源のリップル（脈動）やノイズを除去する重要な部品です。電源アダプターからの電圧は完全な直流ではなく、わずかに波打っています。この220μFという大容量のコンデンサが「貯水池」のように働き、電圧を平滑化します。これがないと、電源ノイズが増幅されて「ブーン」というハム音になります。</p>
+                
+                <!-- 工程8の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程8: 電源部構築</text>
+                        
+                        <!-- 既存の配線（薄く表示） -->
+                        <g opacity="0.4">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <!-- その他の既存部品と配線 -->
+                        </g>
+                        
+                        <!-- Cin（強調表示） -->
+                        <g>
+                            <rect x="470" y="250" width="35" height="60" fill="#ff6347" stroke="#ffd700" stroke-width="3" rx="17"/>
+                            <text x="487" y="285" text-anchor="middle" fill="white" font-size="12" font-weight="bold">Cin</text>
+                            <text x="487" y="325" text-anchor="middle" fill="black" font-size="10">220μF</text>
+                            <text x="487" y="340" text-anchor="middle" fill="black" font-size="9">25V</text>
+                            <!-- 極性マーク -->
+                            <line x1="470" y1="260" x2="505" y2="260" stroke="white" stroke-width="3"/>
+                            <line x1="487" y1="250" x2="487" y2="270" stroke="white" stroke-width="3"/>
+                            <text x="487" y="265" text-anchor="middle" fill="white" font-size="16" font-weight="bold">+</text>
+                            <text x="520" y="265" fill="red" font-size="12">←+側</text>
+                        </g>
+                        
+                        <!-- 電源接続配線 -->
+                        <g>
+                            <!-- Cin+から+9Vへ（赤線） -->
+                            <path d="M 487 250 L 487 80" stroke="#ff0000" stroke-width="5" stroke-linecap="round"/>
+                            
+                            <!-- Cin-からGNDへ（黒線） -->
+                            <path d="M 487 310 L 487 320" stroke="#000000" stroke-width="5" stroke-linecap="round"/>
+                        </g>
+                        
+                        <!-- DCジャック図解 -->
+                        <g transform="translate(100, 150)">
+                            <rect x="-30" y="-20" width="60" height="40" fill="#333" stroke="#666" stroke-width="2" rx="5"/>
+                            <circle cx="0" cy="0" r="12" fill="#666" stroke="#999" stroke-width="2"/>
+                            <circle cx="0" cy="0" r="5" fill="#333"/>
+                            <text x="0" y="-5" text-anchor="middle" fill="white" font-size="20">-</text>
+                            <text x="0" y="-30" text-anchor="middle" fill="white" font-size="10">DCジャック</text>
+                            <text x="0" y="35" text-anchor="middle" fill="red" font-size="9" font-weight="bold">センター（-）</text>
+                            <text x="0" y="48" text-anchor="middle" fill="black" font-size="9">BOSS対応</text>
+                            <!-- 配線 -->
+                            <path d="M 5 0 L 50 0 L 50 170 L 380 170" stroke="#000000" stroke-width="3" stroke-dasharray="5,5"/>
+                            <path d="M 12 0 A 12 12 0 0 1 -12 0 L -12 -70 L 380 -70" stroke="#ff0000" stroke-width="3" stroke-dasharray="5,5"/>
+                            <text x="60" y="-75" fill="red" font-size="10">外側(+)</text>
+                            <text x="60" y="175" fill="black" font-size="10">中心(-)</text>
+                        </g>
+                        
+                        <!-- 電源の流れ図解 -->
+                        <g transform="translate(250, 100)">
+                            <rect x="-60" y="-15" width="120" height="30" fill="white" stroke="#333" stroke-width="1" rx="5"/>
+                            <text x="0" y="0" text-anchor="middle" font-size="10">DC9V</text>
+                            <text x="0" y="10" text-anchor="middle" font-size="8">リップル含む</text>
+                            <path d="M 60 0 L 80 0" stroke="#333" stroke-width="2" marker-end="url(#arrowhead8)"/>
+                            <text x="120" y="5" text-anchor="middle" font-size="10">Cinで平滑化</text>
+                            <path d="M 160 0 L 180 0" stroke="#333" stroke-width="2" marker-end="url(#arrowhead8)"/>
+                            <text x="220" y="5" text-anchor="middle" font-size="10">きれいなDC</text>
+                        </g>
+                        
+                        <!-- 矢印マーカー -->
+                        <defs>
+                            <marker id="arrowhead8" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#333"/>
+                            </marker>
+                        </defs>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 極性を必ず確認！ 逆接続は破損の原因</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>Cin（220μF）の取付
+                        <ul>
+                            <li>位置：（X=25, Y=15）+側、（X=25, Y=17）-側</li>
+                            <li><strong>極性確認：</strong>+マークまたは長い足を上側（+9V側）へ</li>
+                            <li>耐圧25V以上のものを使用</li>
+                        </ul>
+                        <em>→ 耐圧は使用電圧の2倍以上が安全です（9V×2＝18V以上）</em>
+                    </li>
+                    <li>電源接続
+                        <ul>
+                            <li>赤色単線で（X=25, Y=15）から（X=25, Y=2）+9Vラインへ</li>
+                            <li>黒色単線で（X=25, Y=17）から（X=25, Y=18）GNDラインへ</li>
+                        </ul>
+                        <em>→ 電源入力のすぐ近くに配置して、ノイズを元から断ちます</em>
+                    </li>
+                    <li>DCジャックの配線
+                        <ul>
+                            <li><strong>⚠️ 重要：BOSSアダプターはセンターマイナス！</strong></li>
+                            <li>黒色より線でDCジャック<strong>中心ピン</strong>からGNDラインへ</li>
+                            <li>赤色より線でDCジャック<strong>外側端子</strong>から+9Vラインへ</li>
+                            <li>極性：センターマイナス（一般的なエフェクター仕様）</li>
+                        </ul>
+                        <em>→ 極性を間違えると即ショート！必ずテスターで確認してください</em>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>【工程9】外部配線の完成</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p>入出力ジャックとスイッチは、ユーザーが直接触れる部分です。<strong>ジャックのスリーブ（外側）をGNDに接続</strong>することで、シールド効果を持たせ、外部ノイズを防ぎます。<strong>SW1</strong>はCkをバイパスするかどうかの切り替えで、音のキャラクターを変えます。配線を整理することで、見た目だけでなく、ノイズ対策にもなります。</p>
+                
+                <!-- 工程9の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程9: 外部配線完成（LED追加）</text>
+                        
+                        <!-- 基板の概要（完成状態） -->
+                        <g opacity="0.6">
+                            <!-- すべての部品と配線を薄く表示 -->
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                        </g>
+                        
+                        <!-- ジャック配線（強調） -->
+                        <g>
+                            <!-- 入力ジャック -->
+                            <rect x="60" y="180" width="40" height="40" fill="#555" stroke="#ffd700" stroke-width="3" rx="5"/>
+                            <circle cx="80" cy="200" r="10" fill="#333"/>
+                            <circle cx="80" cy="200" r="5" fill="#ffd700"/>
+                            <text x="80" y="235" text-anchor="middle" fill="black" font-size="10">INPUT</text>
+                            <!-- Tip配線（白） -->
+                            <path d="M 85 195 L 150 195" stroke="white" stroke-width="3" stroke-linecap="round"/>
+                            <text x="120" y="190" fill="black" font-size="9">Tip(白)</text>
+                            <!-- Sleeve配線（黒） -->
+                            <path d="M 80 210 L 80 320" stroke="black" stroke-width="3" stroke-linecap="round" stroke-dasharray="5,5"/>
+                            <text x="50" y="270" fill="black" font-size="9">Sleeve</text>
+                            
+                            <!-- 出力ジャック -->
+                            <rect x="500" y="180" width="40" height="40" fill="#555" stroke="#ffd700" stroke-width="3" rx="5"/>
+                            <circle cx="520" cy="200" r="10" fill="#333"/>
+                            <circle cx="520" cy="200" r="5" fill="#ffd700"/>
+                            <text x="520" y="235" text-anchor="middle" fill="black" font-size="10">OUTPUT</text>
+                            <!-- 配線は既に接続済み -->
+                        </g>
+                        
+                        <!-- LED配線（新規強調） -->
+                        <g>
+                            <!-- 電源LED（赤） -->
+                            <circle cx="150" cy="100" r="12" fill="#ff0000" stroke="#ffd700" stroke-width="3"/>
+                            <text x="150" y="105" text-anchor="middle" fill="white" font-size="8" font-weight="bold">PWR</text>
+                            <path d="M 150 88 L 150 80" stroke="#ff0000" stroke-width="3"/>
+                            <path d="M 150 112 L 150 125 L 200 125" stroke="black" stroke-width="2"/>
+                            <rect x="200" y="120" width="30" height="10" fill="#8b4513" stroke="#333" rx="2"/>
+                            <text x="215" y="128" text-anchor="middle" fill="white" font-size="8">1k</text>
+                            <path d="M 230 125 L 250 125 L 250 320" stroke="black" stroke-width="2"/>
+                            
+                            <!-- OD LED（青） -->
+                            <circle cx="250" cy="100" r="12" fill="#0066ff" stroke="#ffd700" stroke-width="3"/>
+                            <text x="250" y="105" text-anchor="middle" fill="white" font-size="8" font-weight="bold">OD</text>
+                            <path d="M 250 88 L 250 70 L 350 70" stroke="#999999" stroke-width="3" stroke-dasharray="5,5"/>
+                            <text x="300" y="65" fill="black" font-size="9">SW2 Ra2端子から</text>
+                            <path d="M 250 112 L 250 140 L 280 140" stroke="black" stroke-width="2"/>
+                            <rect x="280" y="135" width="30" height="10" fill="#8b4513" stroke="#333" rx="2"/>
+                            <text x="295" y="143" text-anchor="middle" fill="white" font-size="8">1k</text>
+                            <path d="M 310 140 L 330 140 L 330 320" stroke="black" stroke-width="2"/>
+                        </g>
+                        
+                        <!-- SW1配線（強調） -->
+                        <g transform="translate(200, 320)">
+                            <rect x="-20" y="-40" width="40" height="40" fill="white" stroke="#3366ff" stroke-width="3" rx="5"/>
+                            <circle cx="0" cy="-20" r="3" fill="#333"/>
+                            <circle cx="0" cy="-10" r="3" fill="#333"/>
+                            <line x1="0" y1="-20" x2="0" y2="-10" stroke="#333" stroke-width="4"/>
+                            <text x="0" y="15" text-anchor="middle" font-size="10">SW1</text>
+                            <text x="0" y="28" text-anchor="middle" font-size="8">Ckバイパス</text>
+                            <!-- 配線 -->
+                            <path d="M 0 -20 L -50 -20 L -50 -60" stroke="#3366ff" stroke-width="3" stroke-dasharray="5,5"/>
+                            <text x="-80" y="-65" fill="black" font-size="9">Rkから</text>
+                            <path d="M 0 -10 L 0 0" stroke="black" stroke-width="3"/>
+                        </g>
+                        
+                        <!-- LED極性の注意 -->
+                        <g transform="translate(400, 120)">
+                            <rect x="-60" y="-25" width="120" height="50" fill="#fff3cd" stroke="#ffeeba" stroke-width="2" rx="5"/>
+                            <text x="0" y="-10" text-anchor="middle" font-size="10" font-weight="bold">LED極性注意</text>
+                            <text x="0" y="5" text-anchor="middle" font-size="9">長い足 = アノード(+)</text>
+                            <text x="0" y="18" text-anchor="middle" font-size="9">短い足 = カソード(-)</text>
+                        </g>
+                        
+                        <!-- 配線整理の図解 -->
+                        <g transform="translate(400, 280)">
+                            <rect x="-60" y="-20" width="120" height="40" fill="#e8f5e9" stroke="#4caf50" stroke-width="2" rx="5"/>
+                            <text x="0" y="-5" text-anchor="middle" font-size="10" font-weight="bold">配線整理</text>
+                            <text x="0" y="8" text-anchor="middle" font-size="9">・熱収縮チューブ使用</text>
+                            <text x="0" y="20" text-anchor="middle" font-size="9">・ケーブルタイで束ねる</text>
+                        </g>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ LED配線を含むすべての外部接続を完成</text>
+                    </svg>
+                </div>
+                
+                <h4>作業内容</h4>
+                <ol>
+                    <li>入力ジャックの配線
+                        <ul>
+                            <li>Tip：白色線をC1入力側へ（既に準備済み）</li>
+                            <li>Sleeve：黒色線でGNDラインへ</li>
+                        </ul>
+                        <em>→ Tipが信号、Sleeveがグランド（シールド）です</em>
+                    </li>
+                    <li>出力ジャックの配線
+                        <ul>
+                            <li>Tip：Volumeポットからの黄色線</li>
+                            <li>Sleeve：黒色線でGNDラインへ</li>
+                        </ul>
+                        <em>→ 入力と同じく、確実なグランド接続が重要</em>
+                    </li>
+                    <li>SW1の配線
+                        <ul>
+                            <li>端子1：Rk下端からの青色線</li>
+                            <li>端子2：黒色線でGNDラインへ</li>
+                            <li>スイッチON＝ショート（Ckバイパス無効）</li>
+                        </ul>
+                        <em>→ ON時はRkのみ（クリーン）、OFF時はRk//Ck（高ゲイン）</em>
+                    </li>
+                    <li><strong>LED配線（新規追加）</strong>
+                        <ul>
+                            <li><strong>電源LED（赤）：</strong>
+                                <ul>
+                                    <li>+9Vライン → LED赤アノード（長い足）</li>
+                                    <li>LED赤カソード → 1kΩ抵抗 → GND</li>
+                                    <li>ケース前面にベゼルで固定</li>
+                                </ul>
+                            </li>
+                            <li><strong>OD表示LED（青）：</strong>
+                                <ul>
+                                    <li>SW2のRa2側端子 → LED青アノード（長い足）</li>
+                                    <li>LED青カソード → 1kΩ抵抗 → GND</li>
+                                    <li>SW2がRa2選択時のみ点灯</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <em>→ LEDの極性に注意！長い足がアノード（+側）です</em>
+                    </li>
+                    <li>配線の整理とスターグランド
+                        <ul>
+                            <li>ケーブルタイで配線を束ねる</li>
+                            <li>信号線と電源線を分離</li>
+                            <li><strong>熱収縮チューブで接続部を保護</strong></li>
+                            <li><strong>スターグランド実装（ノイズ対策）：</strong>
+                                <ul>
+                                    <li>入力ジャックのスリーブを「GND集中点」とする</li>
+                                    <li>出力ジャックスリーブ → 入力ジャックスリーブへ</li>
+                                    <li>基板GNDライン → 入力ジャックスリーブへ</li>
+                                    <li>DCジャック（-）端子 → 入力ジャックスリーブへ</li>
+                                    <li>金属ケースの場合 → 入力ジャックスリーブへ</li>
+                                </ul>
+                            </li>
+                            <li><strong>シールド線の使用（推奨）：</strong>
+                                <ul>
+                                    <li>入力ジャック〜基板間に使用</li>
+                                    <li>シールドは片端接地（ジャック側のみGND接続）</li>
+                                    <li>両端接地はグランドループの原因になるので避ける</li>
+                                </ul>
+                            </li>
+                        </ul>
+                        <em>→ スターグランドによりハムノイズを大幅に低減できます</em>
+                    </li>
+                </ol>
+            </div>
+
+            <h3>【工程10】最終確認と動作テスト</h3>
+            <div class="step-box">
+                <h4>🤔 なぜこの作業をするのか？</h4>
+                <p>電子回路は小さなミスが大きな故障につながります。<strong>段階的なテスト</strong>により、問題を早期発見し、高価な真空管や接続機器を守ります。特に初回電源投入時は慎重に行い、異常があればすぐに電源を切ることが重要です。</p>
+                
+                <!-- 工程10の図面 -->
+                <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                    <svg width="600" height="400" viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="50" y="50" width="500" height="300" fill="#2d4a2b" stroke="#666" stroke-width="2"/>
+                        <text x="300" y="30" text-anchor="middle" font-size="16" font-weight="bold">工程10: 最終確認と動作テスト</text>
+                        
+                        <!-- 完成した基板（概要） -->
+                        <g opacity="0.8">
+                            <line x1="80" y1="80" x2="520" y2="80" stroke="#ff0000" stroke-width="4"/>
+                            <line x1="80" y1="320" x2="520" y2="320" stroke="#000000" stroke-width="4"/>
+                            <circle cx="300" cy="200" r="60" fill="#666" stroke="#333" stroke-width="2"/>
+                            <!-- 真空管（挿入前） -->
+                            <text x="300" y="205" text-anchor="middle" fill="white" font-size="12">真空管</text>
+                            <text x="300" y="220" text-anchor="middle" fill="white" font-size="10">挿入前</text>
+                        </g>
+                        
+                        <!-- テスターでの確認ポイント -->
+                        <g>
+                            <!-- テスター図解 -->
+                            <rect x="420" y="120" width="80" height="100" fill="#333" stroke="#666" stroke-width="2" rx="5"/>
+                            <rect x="430" y="130" width="60" height="40" fill="#9e9e9e" rx="3"/>
+                            <text x="460" y="155" text-anchor="middle" fill="#00ff00" font-size="16" font-family="monospace">∞Ω</text>
+                            <circle cx="440" cy="200" r="5" fill="red"/>
+                            <circle cx="480" cy="200" r="5" fill="black"/>
+                            <text x="460" y="235" text-anchor="middle" fill="white" font-size="10">テスター</text>
+                            
+                            <!-- 測定ポイント -->
+                            <path d="M 440 195 L 440 80" stroke="red" stroke-width="2" stroke-dasharray="3,3"/>
+                            <path d="M 480 195 L 480 320" stroke="black" stroke-width="2" stroke-dasharray="3,3"/>
+                            <text x="510" y="150" fill="black" font-size="10">+9V-GND間</text>
+                            <text x="510" y="165" fill="black" font-size="10">ショート確認</text>
+                        </g>
+                        
+                        <!-- チェックリスト -->
+                        <g transform="translate(100, 120)">
+                            <rect x="-40" y="-20" width="180" height="140" fill="white" stroke="#4caf50" stroke-width="2" rx="5"/>
+                            <text x="50" y="-5" text-anchor="middle" font-size="11" font-weight="bold">確認項目</text>
+                            <g font-size="9">
+                                <rect x="-30" y="10" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="19">電源ショートなし</text>
+                                <rect x="-30" y="25" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="34">入力経路の導通</text>
+                                <rect x="-30" y="40" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="49">出力経路の導通</text>
+                                <rect x="-30" y="55" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="64">Pin4-5間 10-20Ω</text>
+                                <rect x="-30" y="70" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="79">SW1/SW2動作確認</text>
+                                <rect x="-30" y="85" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="94">電解コンデンサ極性</text>
+                                <rect x="-30" y="100" width="10" height="10" fill="none" stroke="#333" stroke-width="1"/>
+                                <text x="-15" y="109">はんだブリッジなし</text>
+                            </g>
+                        </g>
+                        
+                        <!-- 真空管挿入時の注意 -->
+                        <g transform="translate(300, 280)">
+                            <rect x="-80" y="-20" width="160" height="60" fill="#fff3cd" stroke="#ffeeba" stroke-width="2" rx="5"/>
+                            <text x="0" y="-5" text-anchor="middle" font-size="10" font-weight="bold">真空管挿入時</text>
+                            <text x="0" y="10" text-anchor="middle" font-size="9">1. 電源OFF確認</text>
+                            <text x="0" y="23" text-anchor="middle" font-size="9">2. 向きを合わせる</text>
+                            <text x="0" y="36" text-anchor="middle" font-size="9">3. まっすぐ押し込む</text>
+                        </g>
+                        
+                        <!-- 動作時の真空管 -->
+                        <g transform="translate(450, 250)">
+                            <circle cx="0" cy="0" r="30" fill="#666" stroke="#ff6600" stroke-width="2"/>
+                            <circle cx="0" cy="0" r="20" fill="#ff9933" opacity="0.6"/>
+                            <circle cx="0" cy="0" r="10" fill="#ffcc66" opacity="0.8"/>
+                            <text x="0" y="45" text-anchor="middle" font-size="10">ヒーター発光</text>
+                            <text x="0" y="58" text-anchor="middle" font-size="9">（薄いオレンジ）</text>
+                        </g>
+                        
+                        <text x="300" y="380" text-anchor="middle" font-size="12" fill="black">※ 段階的にテストして安全を確認</text>
+                    </svg>
+                </div>
+                
+                <h4>電源投入前の確認</h4>
+                <ol>
+                    <li><strong>DCジャック極性確認（最重要）</strong>
+                        <ul>
+                            <li>テスターでDCジャックの極性を確認</li>
+                            <li>中心端子：マイナス（GND）</li>
+                            <li>外側端子：プラス（+9V）</li>
+                            <li><strong>BOSSアダプターはセンターマイナス！</strong></li>
+                        </ul>
+                        <em>→ 極性を間違えると即座に回路が破損する可能性があります</em>
+                    </li>
+                    <li><strong>目視検査</strong>
+                        <ul>
+                            <li>はんだ付け部分にイモはんだやブリッジがないか</li>
+                            <li>部品の向き（特に電解コンデンサ）が正しいか</li>
+                            <li>配線の色が設計通りか</li>
+                        </ul>
+                        <em>→ 目で見て分かる問題は、この段階で必ず修正します</em>
+                    </li>
+                    <li><strong>導通チェック</strong>
+                        <ul>
+                            <li>+9VとGND間：開放（∞Ω）</li>
+                            <li>入力Tip→C1→Pin2の導通</li>
+                            <li>Pin1→C2→Volume→出力Tipの導通</li>
+                            <li>各スイッチの動作確認</li>
+                        </ul>
+                        <em>→ 信号の流れる経路が正しくつながっているか確認</em>
+                    </li>
+                    <li><strong>抵抗値測定</strong>
+                        <ul>
+                            <li>Pin4-Pin5間：10-20Ω（ヒーター）</li>
+                            <li>SW2切替時のPin1-+9V間：100kΩ/470kΩ</li>
+                        </ul>
+                        <em>→ 部品が正しく接続されていることの最終確認</em>
+                    </li>
+                </ol>
+                <h4>動作テスト</h4>
+                <ol>
+                    <li><strong>アダプター単体の確認</strong>
+                        <ul>
+                            <li>アダプターをコンセントに接続（本体には未接続）</li>
+                            <li>テスターでプラグの電圧と極性を確認</li>
+                            <li>中心：0V（GND）、外側：+9V</li>
+                        </ul>
+                        <em>→ まずアダプター自体が正常か確認</em>
+                    </li>
+                    <li>真空管を挿さずに電源ON
+                        <ul>
+                            <li>Pin4-Pin5間に9V来ているか確認</li>
+                            <li>異常な発熱がないか確認</li>
+                            <li>電源LED（赤）が点灯することを確認</li>
+                        </ul>
+                        <em>→ まず真空管なしで基本動作を確認します</em>
+                    </li>
+                    <li>電源OFFして真空管を挿入
+                        <ul>
+                            <li>向きに注意（切り欠きを合わせる）</li>
+                            <li>まっすぐ押し込む</li>
+                        </ul>
+                        <em>→ 斜めに挿すとピンが曲がります</em>
+                    </li>
+                    <li>再度電源ON
+                        <ul>
+                            <li>ヒーターがオレンジ色に光るか確認（薄暗い光が正常）</li>
+                            <li>Volume最小でアンプに接続</li>
+                            <li>ギターを接続して音出し確認</li>
+                        </ul>
+                        <em>→ 9Vでは薄暗い光ですが、これが正常です</em>
+                    </li>
+                    <li>機能テスト
+                        <ul>
+                            <li>SW1：ON/OFFでゲイン変化確認</li>
+                            <li>SW2：クリーン/ODの切替確認（青LED連動）</li>
+                            <li>Volume：音量調整の確認</li>
+                        </ul>
+                        <em>→ すべての機能が設計通り動作することを確認</em>
+                    </li>
+                </ol>
+                <h4>トラブルシューティング</h4>
+                <ul>
+                    <li><strong>音が出ない：</strong>信号経路を入力から順に追跡
+                        <br><em>→ オシロスコープやオーディオプローブで信号を追跡</em></li>
+                    <li><strong>ノイズが多い：</strong>シールド処理、グランドループ確認
+                        <br><em>→ すべてのGNDが一点に集まっているか確認</em></li>
+                    <li><strong>歪みすぎる：</strong>Ra値の確認、電源電圧確認
+                        <br><em>→ 部品の値が間違っていないか再確認</em></li>
+                    <li><strong>発振する：</strong>配線の引き回し、入出力の分離
+                        <br><em>→ 高ゲイン時は配線がアンテナになりやすい</em></li>
+                </ul>
+            </div>
+        </div>
+
+        <h2>🎉 完成おめでとうございます！</h2>
+        
+        <!-- 完成した回路の全体図 -->
+        <div class="svg-container" style="background-color: #f0f0f0; padding: 20px; margin: 20px 0; border-radius: 8px;">
+            <svg width="800" height="500" viewBox="0 0 800 500" xmlns="http://www.w3.org/2000/svg">
+                <rect x="50" y="50" width="700" height="400" fill="#2d4a2b" stroke="#666" stroke-width="3" rx="5"/>
+                <text x="400" y="30" text-anchor="middle" font-size="18" font-weight="bold">Valvecaster改 完成配線図（全体）</text>
+                
+                <!-- 電源ライン -->
+                <line x1="80" y1="80" x2="720" y2="80" stroke="#ff0000" stroke-width="5"/>
+                <text x="40" y="85" fill="white" font-size="14" font-weight="bold">+9V</text>
+                <line x1="80" y1="420" x2="720" y2="420" stroke="#000000" stroke-width="5"/>
+                <text x="35" y="425" fill="white" font-size="14" font-weight="bold">GND</text>
+                
+                <!-- 真空管ソケット -->
+                <g id="complete-tube">
+                    <circle cx="400" cy="250" r="65" fill="rgba(100,100,100,0.8)" stroke="#333" stroke-width="2"/>
+                    <text x="400" y="255" text-anchor="middle" fill="white" font-weight="bold" font-size="16">12AX7</text>
+                    <!-- ピン -->
+                    <circle cx="370" cy="220" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 1 -->
+                    <circle cx="370" cy="280" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 2 -->
+                    <circle cx="400" cy="295" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 3 -->
+                    <circle cx="430" cy="280" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 4 -->
+                    <circle cx="430" cy="220" r="8" fill="#ffd700" stroke="#333" stroke-width="1"/> <!-- Pin 5 -->
+                </g>
+                
+                <!-- すべての部品 -->
+                <g id="all-components">
+                    <!-- C1 -->
+                    <rect x="240" y="270" width="35" height="20" fill="#4169e1" stroke="#000" rx="3"/>
+                    <text x="257" y="283" text-anchor="middle" fill="white" font-size="10">C1</text>
+                    
+                    <!-- Rg（グリッドリーク抵抗） -->
+                    <rect x="280" y="300" width="20" height="35" fill="#8b4513" stroke="#000" rx="3"/>
+                    <text x="290" y="320" text-anchor="middle" fill="white" font-size="10">Rg</text>
+                    
+                    <!-- C2 -->
+                    <rect x="530" y="270" width="35" height="20" fill="#4169e1" stroke="#000" rx="3"/>
+                    <text x="547" y="283" text-anchor="middle" fill="white" font-size="10">C2</text>
+                    
+                    <!-- Rk -->
+                    <rect x="390" y="340" width="20" height="40" fill="#8b4513" stroke="#000" rx="3"/>
+                    <text x="400" y="363" text-anchor="middle" fill="white" font-size="10">Rk</text>
+                    
+                    <!-- Ck -->
+                    <rect x="430" y="340" width="20" height="40" fill="#ff6347" stroke="#000" rx="3"/>
+                    <text x="440" y="363" text-anchor="middle" fill="white" font-size="10">Ck</text>
+                    <line x1="440" y1="345" x2="440" y2="355" stroke="white" stroke-width="2"/>
+                    
+                    <!-- Ra1 -->
+                    <rect x="480" y="140" width="50" height="20" fill="#8b4513" stroke="#000" rx="3"/>
+                    <text x="505" y="153" text-anchor="middle" fill="white" font-size="10">Ra1</text>
+                    
+                    <!-- Ra2 -->
+                    <rect x="480" y="180" width="50" height="20" fill="#8b4513" stroke="#000" rx="3"/>
+                    <text x="505" y="193" text-anchor="middle" fill="white" font-size="10">Ra2</text>
+                    
+                    <!-- Cin -->
+                    <rect x="650" y="320" width="30" height="50" fill="#ff6347" stroke="#000" rx="3"/>
+                    <text x="665" y="350" text-anchor="middle" fill="white" font-size="10">Cin</text>
+                    <line x1="665" y1="325" x2="665" y2="335" stroke="white" stroke-width="2"/>
+                </g>
+                
+                <!-- すべての配線 -->
+                <g id="all-wiring">
+                    <!-- 入力信号（白） -->
+                    <path d="M 100 280 L 240 280" stroke="white" stroke-width="3"/>
+                    <path d="M 275 280 L 370 280" stroke="white" stroke-width="3"/>
+                    
+                    <!-- Rgの接続（黒） -->
+                    <path d="M 290 280 L 290 300" stroke="#8b4513" stroke-width="2"/>
+                    <path d="M 290 335 L 290 420" stroke="black" stroke-width="3"/>
+                    
+                    <!-- カソード配線（橙） -->
+                    <path d="M 400 295 L 400 340" stroke="#ff9900" stroke-width="3"/>
+                    <path d="M 400 340 L 440 340" stroke="#ff9900" stroke-width="3"/>
+                    
+                    <!-- SW1配線（青） -->
+                    <path d="M 400 380 L 400 420" stroke="#3366ff" stroke-width="3"/>
+                    <circle cx="400" cy="390" r="4" fill="#3366ff"/>
+                    
+                    <!-- プレート配線（橙） -->
+                    <path d="M 370 220 L 470 220 L 470 280 L 530 280" stroke="#ff9900" stroke-width="3"/>
+                    
+                    <!-- SW2配線（灰） -->
+                    <path d="M 370 220 L 370 170" stroke="#999999" stroke-width="3"/>
+                    <circle cx="370" cy="170" r="4" fill="#999999"/>
+                    <path d="M 370 170 L 480 150" stroke="#999999" stroke-width="3" stroke-dasharray="5,5"/>
+                    <path d="M 370 170 L 480 190" stroke="#999999" stroke-width="3" stroke-dasharray="5,5"/>
+                    
+                    <!-- 電源接続（赤） -->
+                    <path d="M 530 150 L 560 150 L 560 80" stroke="#ff0000" stroke-width="3"/>
+                    <path d="M 530 190 L 560 190 L 560 80" stroke="#ff0000" stroke-width="3"/>
+                    <path d="M 665 320 L 665 80" stroke="#ff0000" stroke-width="3"/>
+                    
+                    <!-- ヒーター（緑） -->
+                    <path d="M 430 220 L 430 80" stroke="#00cc00" stroke-width="3"/>
+                    <path d="M 430 280 L 430 420" stroke="#00cc00" stroke-width="3"/>
+                    
+                    <!-- 出力信号（黄） -->
+                    <path d="M 565 280 L 700 280" stroke="#ffcc00" stroke-width="3"/>
+                    
+                    <!-- Cin GND（黒） -->
+                    <path d="M 665 370 L 665 420" stroke="#000000" stroke-width="3"/>
+                </g>
+                
+                <!-- 端子ラベル -->
+                <g id="terminals">
+                    <!-- 入力 -->
+                    <rect x="70" y="265" width="50" height="30" fill="rgba(255,255,255,0.9)" rx="5"/>
+                    <text x="95" y="285" text-anchor="middle" font-size="12">INPUT</text>
+                    
+                    <!-- 出力 -->
+                    <rect x="680" y="265" width="50" height="30" fill="rgba(255,255,255,0.9)" rx="5"/>
+                    <text x="705" y="285" text-anchor="middle" font-size="12">OUT</text>
+                    
+                    <!-- SW1 -->
+                    <rect x="370" y="395" width="60" height="20" fill="rgba(255,255,255,0.8)" rx="3"/>
+                    <text x="400" y="408" text-anchor="middle" font-size="10">SW1</text>
+                    
+                    <!-- SW2 -->
+                    <rect x="340" y="145" width="60" height="20" fill="rgba(255,255,255,0.8)" rx="3"/>
+                    <text x="370" y="158" text-anchor="middle" font-size="10">SW2</text>
+                    
+                    <!-- DC IN -->
+                    <rect x="620" y="50" width="50" height="25" fill="rgba(255,0,0,0.8)" rx="3"/>
+                    <text x="645" y="67" text-anchor="middle" font-size="10" fill="white">DC 9V</text>
+                    
+                    <!-- Volume -->
+                    <circle cx="620" cy="280" r="20" fill="rgba(255,255,255,0.8)" stroke="#333" stroke-width="2"/>
+                    <text x="620" y="285" text-anchor="middle" font-size="10">VOL</text>
+                    
+                    <!-- LED表示 -->
+                    <g id="leds">
+                        <!-- 電源LED（赤） -->
+                        <circle cx="150" cy="150" r="10" fill="#ff0000" stroke="#333" stroke-width="2"/>
+                        <text x="150" y="155" text-anchor="middle" fill="white" font-size="8" font-weight="bold">PWR</text>
+                        <path d="M 150 140 L 150 80" stroke="#ff0000" stroke-width="2"/>
+                        <path d="M 150 160 L 150 180 L 180 180" stroke="black" stroke-width="2"/>
+                        <rect x="180" y="175" width="25" height="10" fill="#8b4513" stroke="#333" rx="2"/>
+                        <text x="192" y="183" text-anchor="middle" fill="white" font-size="7">1k</text>
+                        <path d="M 205 180 L 220 180 L 220 420" stroke="black" stroke-width="2"/>
+                        
+                        <!-- OD LED（青） -->
+                        <circle cx="200" cy="150" r="10" fill="#0066ff" stroke="#333" stroke-width="2"/>
+                        <text x="200" y="155" text-anchor="middle" fill="white" font-size="8" font-weight="bold">OD</text>
+                        <path d="M 200 140 L 200 120 L 370 120 L 370 170" stroke="#999999" stroke-width="2" stroke-dasharray="3,3"/>
+                        <path d="M 200 160 L 200 200 L 230 200" stroke="black" stroke-width="2"/>
+                        <rect x="230" y="195" width="25" height="10" fill="#8b4513" stroke="#333" rx="2"/>
+                        <text x="242" y="203" text-anchor="middle" fill="white" font-size="7">1k</text>
+                        <path d="M 255 200 L 270 200 L 270 420" stroke="black" stroke-width="2"/>
+                    </g>
+                </g>
+                
+                <!-- 配線カラー凡例 -->
+                <g transform="translate(50, 460)">
+                    <text x="0" y="0" font-size="12" font-weight="bold">配線カラー：</text>
+                    <line x1="80" y1="-3" x2="100" y2="-3" stroke="white" stroke-width="3"/>
+                    <text x="105" y="0" font-size="10">白=入力</text>
+                    <line x1="160" y1="-3" x2="180" y2="-3" stroke="#ffcc00" stroke-width="3"/>
+                    <text x="185" y="0" font-size="10">黄=出力</text>
+                    <line x1="240" y1="-3" x2="260" y2="-3" stroke="#ff9900" stroke-width="3"/>
+                    <text x="265" y="0" font-size="10">橙=内部</text>
+                    <line x1="320" y1="-3" x2="340" y2="-3" stroke="#3366ff" stroke-width="3"/>
+                    <text x="345" y="0" font-size="10">青=SW1</text>
+                    <line x1="400" y1="-3" x2="420" y2="-3" stroke="#999999" stroke-width="3"/>
+                    <text x="425" y="0" font-size="10">灰=SW2</text>
+                    <line x1="480" y1="-3" x2="500" y2="-3" stroke="#00cc00" stroke-width="3"/>
+                    <text x="505" y="0" font-size="10">緑=ヒーター</text>
+                    <line x1="580" y1="-3" x2="600" y2="-3" stroke="#ff0000" stroke-width="3"/>
+                    <text x="605" y="0" font-size="10">赤=+9V</text>
+                    <line x1="660" y1="-3" x2="680" y2="-3" stroke="#000000" stroke-width="3"/>
+                    <text x="685" y="0" font-size="10">黒=GND</text>
+                </g>
+            </svg>
+        </div>
+        
+        <div class="step-box" style="background-color: #d4edda; border-left-color: #28a745;">
+            <h4>🎸 なぜValvecasterは素晴らしいのか？</h4>
+            <p>このシンプルな回路で、真空管特有の「生きた音」が得られる理由：</p>
+            <ul>
+                <li><strong>偶数次高調波：</strong>真空管の非線形特性により、音楽的に心地よい倍音が付加されます</li>
+                <li><strong>動的レスポンス：</strong>ピッキングの強弱に敏感に反応し、表現力豊かな演奏が可能</li>
+                <li><strong>自然なコンプレッション：</strong>大入力時に自然に圧縮され、音がまとまります</li>
+                <li><strong>低電圧の魅力：</strong>9V動作により独特の「枯れた」トーンが得られます</li>
+            </ul>
+            
+            <h4>今後のカスタマイズ案（なぜ効果的か）</h4>
+            <ul>
+                <li><strong>Ckを47μFに変更：</strong>
+                    <br><em>→ より低い周波数までバイパスされ、低音のゲインが増加。ファットなトーンに</em></li>
+                <li><strong>入力にゲインポット追加：</strong>
+                    <br><em>→ ギターのボリュームを下げずにクリーンサウンドが得られ、音質劣化を防げます</em></li>
+                <li><strong>トーンコントロール回路：</strong>
+                    <br><em>→ 簡単なハイカットフィルターでも、音作りの幅が大きく広がります</em></li>
+                <li><strong>12V電源化：</strong>
+                    <br><em>→ ヒーターがより明るく光り、電子放出が増えてゲインアップ。よりクリアな音に</em></li>
+                <li><strong>カスケード接続：</strong>
+                    <br><em>→ 12AX7は2回路入り。もう片方も使えば、さらなる高ゲインが可能</em></li>
+            </ul>
+            
+            <h4>製作を通じて学んだこと</h4>
+            <p>この製作を通じて、以下の基礎知識を実践的に習得されました：</p>
+            <ul>
+                <li>真空管の基本動作原理（カソード、グリッド、プレート）</li>
+                <li>バイアス回路の仕組み（自己バイアス方式）</li>
+                <li>信号のカップリングとDCカット</li>
+                <li>電源フィルタリングの重要性</li>
+                <li>グランディングとノイズ対策</li>
+            </ul>
+            
+            <p><strong>真空管の温かみのあるサウンドをお楽しみください！</strong></p>
+            
+            <div style="text-align: center; margin-top: 30px; padding: 20px; background-color: #f8f9fa; border-radius: 8px;">
+                <h3>🎵 Happy Tube Tone! 🎵</h3>
+                <p>このValvecaster改が、あなたの音楽表現の新たな可能性を開くことを願っています。</p>
+                <p>真空管アンプの世界へようこそ！</p>
+                <div style="margin-top: 20px; padding: 15px; background-color: #e8f4f8; border-radius: 5px;">
+                    <h4>💰 最終コスト（改訂版）</h4>
+                    <p>基本パーツ：6,320円 + LED・安全対策パーツ：700円</p>
+                    <p><strong>総額：約7,020円</strong>で4つの音色を持つ真空管アンプが完成！</p>
+                    <p>市販品の1/3以下の価格で、LED表示付きの本格的な真空管サウンドを実現。</p>
+                    <div style="margin-top: 10px; padding: 10px; background-color: #fff3cd; border: 1px solid #ffeeba; border-radius: 5px;">
+                        <strong>⚠️ 最重要確認事項</strong>
+                        <p>BOSSアダプター（PSA-100等）は<strong>センターマイナス</strong>です！</p>
+                        <p>DCジャック配線：中心＝GND（黒）、外側＝+9V（赤）</p>
+                        <p>逆に接続すると回路が破損します。必ずテスターで確認！</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
